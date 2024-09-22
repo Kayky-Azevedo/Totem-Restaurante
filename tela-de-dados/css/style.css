@@ -1,0 +1,87 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+}
+.container-main{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(230, 243, 255,0.75);   
+}
+.image{
+    width: 27%;
+}
+.movimenta-imagem .Hamburger{
+    position: relative;
+    box-sizing: border-box;
+    top: 30vh;
+    left: 5vh;
+}
+.movimenta-imagem .BlobsVector_1{
+    position: absolute;
+    box-sizing: border-box;
+    top: 56vh;
+}
+.movimenta-imagem .BlobsVector_2{
+    position: absolute;
+    box-sizing: border-box;
+    top: 15vh;
+    left: 10vh;
+}
+.movimenta-imagem .BlobsVector_3{
+    position: absolute;
+    box-sizing: border-box;
+    top: 18vh;
+    left: 5vh;
+}
+.information{
+    border-radius: 4%;
+    position: relative;
+    height: auto;
+    width: 75vw;
+    background-color: #FCFEFF;
+    font-family: sans-serif;   
+}
+.information .title{
+    text-align: center;
+    margin: 25vh 0 5% 0;
+}
+.nome label{
+
+    margin-right: 45%;
+    display: block
+}
+.nome input{
+    border-radius: 12px;
+    width: 50%;
+    height:45px;
+    background-color: #d2d5d8;
+    border: none;
+}
+.cpf label{
+    margin-top: 3%;
+    margin-right: 47%;
+    display: block;
+}
+.cpf input{
+    border-radius: 12px;
+    width: 50%;
+    height: 45px;
+    background-color: #d2d5d8;
+    border: none;
+}
+.information form{
+    text-align: center;
+}
+.button{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-top: 10vh;
+    font-size: 16px;
+    width: 15vw;
+    height: 7vh;
+    background-color: #F9ED32;
+    border: none;
+    border-radius: 10px;
+}

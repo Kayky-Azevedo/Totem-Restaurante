@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div id="slideshow">
+                <img src="imagens-slide/slide-1.png" alt="Anúncio 1" class="slide" style="display: block;">
+                <img src="imagens-slide/slide-2.png" alt="Anúncio 2" class="slide" style="display: none;">
+                <img src="imagens-slide/slide-3.png" alt="Anúncio 3" class="slide" style="display: none;">
+            </div>
+
+        </header>
+        
+        <section class="categorias">
+            <ul>
+                <li data-category="salgados"><img src="Emojis/🍔.png" alt="Salgados"></li>
+                <li data-category="bebidas"><img src="Emojis/Emoji.png" alt="Bebidas"></li>
+            </ul>
+        </section>
+        
+        <section class="menu" id="menu">
+            <div class="cards" id="product-cards">
+                <!-- Os cards de produtos serão inseridos aqui -->
+            </div>  
+        </section>
+        
+        <aside class="sidebar">
+            <h2>Carrinho de Compras</h2>
+            <ul id="lista-pedido" class="carrinho"></ul>
+            <div class="total">
+                <strong>Total: R$ </strong><span id="total">0.00</span>
+            </div>
+            <button class="finalizar-pedido-button" onclick="finalizarPedido()">Finalizar Pedido</button>
+        </aside>
+
+    <script src="javascript/add-menu.js"></script>
+    <script src="javascript/add-to-cart.js"></script>
+    <script src="javascript/slides.js"></script>
+</body>
+</html>

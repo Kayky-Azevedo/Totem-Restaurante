@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Dados</title>
+</head>
+<body>
+
+    <main class="container-main">
+
+        <section class="image">
+
+            <div class="movimenta-imagem">
+
+                <img class="BlobsVector_3" src="image/BlobsVector_3.png" alt="Uma figura amarela atrás do Hamburger">
+
+                <img class="BlobsVector_2" src="image/BlobsVector_2.png" alt="Uma figura amarela atrás do Hamburger">
+
+                <img class="BlobsVector_1" src="image/BlobsVector_1.png" alt="Uma figura amarela atrás do Hamburger">
+                
+                <img class="Hamburger" src="image/Hamburger.png" alt="Uma imagem de um Hamburger">
+
+            </div>
+         
+        </section>
+
+        <section class="information">
+
+            <h1 class="title">Digite seu Dados :</h1>
+
+            <form id="cadastro-form" method="post" name="formulario" >
+
+                <div class="nome">
+
+                    <label for="name">Nome:</label>
+                    <input id="nome"  type="text" name="name" placeholder="       Nome" required pattern="[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$">
+
+                </div>
+
+                <div class="cpf">
+
+                    <label for="cpf">CPF:</label>
+                    <input id="cpf" type="text" name="cpf" placeholder="        CPF" required  pattern="[0-9]+$">
+
+                </div>
+
+                
+                <button class="button" id="button">Acesse o Menu</button>
+
+            </form>
+            
+        </section>
+
+    </main>
+
+    <script src="javascript/valida.js"></script>
+    
+</body>
+
+</html>

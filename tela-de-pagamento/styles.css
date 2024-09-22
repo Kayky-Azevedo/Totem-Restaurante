@@ -1,0 +1,122 @@
+body, html {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5e0c3; /* Tom suave que remete a restaurantes */
+    color: #333;
+}
+
+.payment-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.payment-info {
+    width: 40%;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    background-color: #fff; /* Fundo branco para contrastar com o background */
+    margin-right: 2%;
+}
+
+.order-summary {
+    width: 58%;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    background-color: #fff; /* Fundo branco para o resumo do pedido */
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    color: #666;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.exp-cvv {
+    display: flex;
+    justify-content: space-between;
+}
+
+.exp-cvv div {
+    width: 48%;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(45deg, #FFA500, #FF4500);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.lista-produtos {
+    list-style: none;
+    padding: 0;
+}
+
+.lista-produtos li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.lista-produtos img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.lista-produtos .produto-detalhes {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.total {
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.payment-container {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    height: 100vh; /* Toma toda a altura da tela */
+    padding: 20px;
+}
+
+.payment-info, .order-summary {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    margin: 10px; /* Espaço entre as colunas */
+    flex: 1; /* Faz cada coluna ajustar flexivelmente o espaço disponível */
+    max-width: calc(40% - 20px); /* Limita o máximo de largura da coluna de pagamento */
+}
+
+.order-summary {
+    max-width: calc(60% - 20px); /* Limita o máximo de largura da coluna de resumo do pedido */
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-info">
+            <h1>Confirm Payment</h1>
+            <form id="formulario-pagamento" onsubmit="event.preventDefault(); confirmarPagamento();">
+                <label for="nome">NAME ON CARD</label>
+                <input type="text" id="nome" required>
+
+                <label for="cartao">CARD NUMBER</label>
+                <input type="text" id="cartao" required>
+
+                <div class="exp-cvv">
+                    <div>
+                        <label for="validade">EXP DATE</label>
+                        <input type="text" id="validade" required>
+                    </div>
+                    <div>
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" required>
+                    </div>
+                </div>
+                
+                <button type="submit">PAY NOW</button>
+            </form>
+        </div>
+        <div class="order-summary">
+            <h1>Your Order Summary</h1>
+            <ul id="lista-produtos" class="lista-produtos"></ul>
+            <div class="total">
+                <strong>Total Payable: </strong><span id="total-pagamento"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
