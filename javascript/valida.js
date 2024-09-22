@@ -17,12 +17,12 @@ function login(event) {
     }
 
     if (nome === adminNome && cpf === adminCpf) {
-        window.location.href = '../telas-administrador/cadastro/cadastro-produtos.html'; // Redireciona para a página do administrador
+        window.location.href = 'telas-administrador/cadastro/cadastro-produtos.html'; // Redireciona para a página do administrador
     } else if (nome === segundoNome && cpf === senhaEspecifica) {
-        window.location.href = '../telas-administrador/pedidos/pedidos.html'; // Redireciona para a segunda página do administrador
+        window.location.href = 'telas-administrador/pedidos/pedidos.html'; // Redireciona para a segunda página do administrador
     } else {
         // Redireciona para a tela principal
-        window.location.href = "../tela-principal/menu.html"; // Substitua pelo caminho da sua tela principal
+        window.location.href = "tela-principal/menu.html"; // Substitua pelo caminho da sua tela principal
     }
 }
 
