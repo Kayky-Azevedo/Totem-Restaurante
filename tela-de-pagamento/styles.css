@@ -41,7 +41,7 @@ label {
 }
 
 input {
-    width: 100%;
+    width: 94%;
     padding: 10px;
     margin-top: 5px;
     border-radius: 5px;
@@ -110,9 +110,9 @@ button {
 }
 
 .payment-info, .order-summary {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     border-radius: 8px;
-    margin: 10px; /* Espaço entre as colunas */
+    margin: 15px; /* Espaço entre as colunas */
     flex: 1; /* Faz cada coluna ajustar flexivelmente o espaço disponível */
     max-width: calc(40% - 20px); /* Limita o máximo de largura da coluna de pagamento */
 }

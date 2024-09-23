@@ -86,7 +86,7 @@ body {
 /* CARDS */
 .cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 colunas de cards */
+    grid-template-columns: repeat(5, 1fr); /* 3 colunas de cards */
     gap: 20px;
 }
 
@@ -132,7 +132,7 @@ body {
 
 
 .add-to-cart{
-    background-color: #ff0000; /* Cor vermelha */
+    background-color: #ff9100; /* Cor vermelha */
     border: none;
     padding: 10px;
     border-radius: 50%; /* Deixa o botão redondo */
@@ -152,7 +152,7 @@ button svg {
 }
 
 button:hover {
-    background-color: #cc0000; /* Cor vermelha mais escura no hover */
+    background-color: #b4752d; /* Cor vermelha mais escura no hover */
 }
 
 
@@ -165,11 +165,13 @@ button:hover {
     right: 0;
     background-color: #fff;
     padding: 20px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Alinha o conteúdo e o rodapé no final */
 }
+
 
 .carrinho {
     list-style: none;
@@ -291,21 +293,6 @@ button:hover {
 
 .finalizar-pedido-button:focus {
     outline: none;
-}
-
-/* Estilo do contêiner do carrinho */
-.sidebar {
-    width: 30%;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    right: 0;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Espaça o conteúdo verticalmente */
 }
 
 /* Ajuste o total e o botão */

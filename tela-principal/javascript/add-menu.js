@@ -10,21 +10,21 @@ const products = [
         name: "Cheeseburger",
         description: "Pão, carne, queijo, alface, tomate",
         price: "R$18,00",
-        image: "https://images.unsplash.com/photo-1522680028838-8ac40f7a4305?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwyMDg5NzR8MHwxfGFsbHwyfHx8fHx8fHwxNjIwNjE3MjM1&ixlib=rb-1.2.1&q=80&w=400",
+        image: "./imagens-produtos/1.avif",
         category: "salgados"
     },
     {
         name: "Coca-Cola",
         description: "Refrigerante gelado",
         price: "R$5,00",
-        image: "https://images.unsplash.com/photo-1568050684151-055c73a8b56e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwyMDg5NzR8MHwxfGFsbHwzfHx8fHx8fHwxNjIwNjE3MjM1&ixlib=rb-1.2.1&q=80&w=400",
-        category: "salgados"
+        image: "./imagens-produtos/2442.webp",
+        category: "bebidas"
     },
     {
         name: "Sorvete",
-        description: "Sorvete de creme com calda de chocolate",
+        description: "Sorvete de morango",
         price: "R$10,00",
-        image: "https://images.unsplash.com/photo-1553887996-07dd7b5f7e71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwyMDg5NzR8MHwxfGFsbHwxfHx8fHx8fHwxNjIwNjE3MjM1&ixlib=rb-1.2.1&q=80&w=400",
+        image: "./imagens-produtos/sor-1.webp",
         category: "sobremesas"
     }
 ];
