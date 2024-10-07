@@ -1,0 +1,71 @@
+/* Estilo Global */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(120deg, #f54e42, #f1a10a);
+}
+
+/* Container Centralizado */
+.container {
+    text-align: center;
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Título */
+h1 {
+    color: #f54e42;
+    font-size: 24px;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo dos Botões */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    background-color: #f54e42;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    background-color: #d43d36;
+}
+
+.btn:active {
+    background-color: #b83028;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .button-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 15px;
+    }
+}

@@ -83,77 +83,95 @@ body {
     padding: 20px;
 }
 
-/* CARDS */
+/* Estilo dos cards */
 .cards {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 3 colunas de cards */
+    grid-template-columns: repeat(5, 1fr); /* 5 colunas de cards */
     gap: 20px;
+    justify-items: center; /* Garante que os cards fiquem centralizados */
 }
 
 .card {
-    padding-top: 15px;
+    width: 250px; /* Define um tamanho fixo para a largura do card */
+    height: 350px; /* Define um tamanho fixo para a altura do card */
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden; /* Para garantir que a imagem fique dentro do card */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: relative; /* Necessário para o posicionamento absoluto do botão */
-    width: 100%;
-    max-width: 300px; /* Define um tamanho máximo */
-    margin: 0 auto; /* Centraliza os cards */
+    display: flex;
+    flex-direction: column; /* Organiza os elementos do card verticalmente */
+    justify-content: space-between;
 }
 
+/* Ajuste das imagens */
 .card-image {
-    height: 200px; /* Aumenta o tamanho da imagem para se ajustar ao card */
+    width: 100%;
+    height: 200px; /* Altura fixa da imagem dentro do card */
+    overflow: hidden; /* Garante que a imagem não ultrapasse o card */
 }
 
 .card-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Garante que a imagem preencha o espaço */
+    object-fit: cover; /* A imagem se ajusta ao container, sem distorção */
+    object-position: center; /* Centraliza a imagem no card */
 }
 
+/* Conteúdo do card */
 .card-content {
-    padding: 20px;
+    padding: 15px;
+    flex-grow: 1; /* Faz o conteúdo ocupar o espaço restante */
 }
 
 .card-footer {
+    padding: 15px;
     display: flex;
-    justify-content: space-between; /* Espaça o preço à esquerda e o botão à direita */
+    justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
+    background-color: #f9f9f9;
 }
 
 .price {
     font-size: 16px;
     font-weight: bold;
-    color: #333;
+
 }
 
-
-.add-to-cart{
-    background-color: #ff9100; /* Cor vermelha */
+/* Botão de adicionar ao carrinho */
+.add-to-cart {
+    background-color: #ff9100; /* Cor do botão */
     border: none;
     padding: 10px;
-    border-radius: 50%; /* Deixa o botão redondo */
+    border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 40px;
     height: 40px;
-    position: absolute; /* Posicionamento absoluto */
-    bottom: 10px; /* Ajuste a posição para o canto inferior direito */
-    right: 10px;
+}
+
+.add-to-cart:hover {
+    background-color: #b4752d;
 }
 
 button svg {
-    fill: white; /* Cor do ícone "+" */
+    fill: white;
 }
 
-button:hover {
-    background-color: #b4752d; /* Cor vermelha mais escura no hover */
+@media (max-width: 1100px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
+
+@media (max-width: 800px) {
+    .cards {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 
 /*SIDEBAR*/
@@ -300,18 +318,4 @@ button:hover {
     margin-bottom: 20px; /* Espaço para o botão */
 }
 
-
-
-@media (max-width: 1100px) {
-    .cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Media query para telas de até 500px - muda para 1 coluna */
-@media (max-width: 800px) {
-    .cards {
-        grid-template-columns: 1fr;
-    }
-}
 

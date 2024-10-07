@@ -6,8 +6,6 @@ function login(event) {
     const adminNome = 'NomeAdmin'; // Substitua pelo nome do administrador
     const adminCpf = '12345678901'; // Substitua pelo CPF do administrador
 
-    const segundoNome = 'SegundoNome'; // Substitua pelo segundo nome do administrador
-    const senhaEspecifica = '09876543212'; // Substitua pela senha específica
 
     const message = document.getElementById('message');
 
@@ -17,9 +15,7 @@ function login(event) {
     }
 
     if (nome === adminNome && cpf === adminCpf) {
-        window.location.href = 'telas-administrador/cadastro/cadastro-produtos.html'; // Redireciona para a página do administrador
-    } else if (nome === segundoNome && cpf === senhaEspecifica) {
-        window.location.href = 'telas-administrador/pedidos/pedidos.html'; // Redireciona para a segunda página do administrador
+        window.location.href = 'telas-administrador/escolha/escolhas.html'; // Redireciona para a página do administrador
     } else {
         // Redireciona para a tela principal
         window.location.href = "tela-principal/menu.html"; // Substitua pelo caminho da sua tela principal
