@@ -1,14 +1,36 @@
 /* Estilização do corpo com fundo gradiente */
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom right, #ff8c00, #ff4500); /* Alaranjado para vermelho */
+    background: linear-gradient(to bottom right, #ff8c00, #ff4500);
     color: #fff;
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
+
+.btn-voltar {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #ff4400;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    z-index: 100;
+}
+
+.btn-voltar:hover {
+    background-color: #f8703a;
+}
+
 
 .admin-container {
     background-color: rgba(0, 0, 0, 0.7);
@@ -28,6 +50,18 @@ form {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    input, select, textarea, button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    button {
+        font-size: 14px;
+    }
 }
 
 .form-group {
@@ -88,6 +122,12 @@ button:hover {
     object-fit: cover;
     border-radius: 50%;
 }
+@media (max-width: 768px) {
+    #lista-produtos-cadastrados img {
+        width: 30px;
+        height: 30px;
+    }
+}
 
 .produto-acoes {
     display: flex;
@@ -99,4 +139,32 @@ button:hover {
     font-size: 12px;
     border-radius: 3px;
     cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 20px;
+        width: 100%;
+        max-width: none;
+    }
+
+    #lista-produtos-cadastrados li {
+        flex-direction: column;
+        text-align: left;
+        align-items: flex-start;
+    }
+
+    .produto-acoes {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    form {
+        gap: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
 }

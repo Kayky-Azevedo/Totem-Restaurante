@@ -11,13 +11,33 @@ body {
     background: linear-gradient(120deg, #f54e42, #f1a10a);
 }
 
+.btn-voltar {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #ff4400;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    z-index: 100;
+}
+
+.btn-voltar:hover {
+    background-color: #f8703a;
+}
+
 /* Container Centralizado */
 .container {
     text-align: center;
     background-color: white;
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 15px 20px 20px rgba(0, 0, 0, 0.5);
     max-width: 400px;
     width: 100%;
 }
@@ -46,7 +66,7 @@ h1 {
     font-weight: bold;
     border-radius: 6px;
     transition: background-color 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .btn:hover {
