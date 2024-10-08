@@ -22,19 +22,20 @@
 .movimenta-imagem .BlobsVector_1{
     position: absolute;
     box-sizing: border-box;
-    top: 56vh;
+    top: 46vh;
 }
 .movimenta-imagem .BlobsVector_2{
     position: absolute;
     box-sizing: border-box;
-    top: 15vh;
-    left: 10vh;
+    top: 20vh;
+    left: 15vh;
 }
+
 .movimenta-imagem .BlobsVector_3{
     position: absolute;
     box-sizing: border-box;
-    top: 18vh;
-    left: 5vh;
+    top: 23vh;
+    left: 2vh;
 }
 .information{
     border-radius: 4%;
