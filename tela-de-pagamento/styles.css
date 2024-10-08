@@ -6,6 +6,26 @@ body, html {
     color: #333;
 }
 
+.btn-voltar {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #ff4400;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    z-index: 100;
+}
+
+.btn-voltar:hover {
+    background-color: #f8703a;
+}
+
 .payment-container {
     display: flex;
     justify-content: space-between;
