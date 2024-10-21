@@ -1,0 +1,115 @@
+html {
+    overflow-x: hidden; /* Adicionando overflow-x hidden ao html */
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-primary-1);
+    overflow-x: hidden; /* Impede a rolagem lateral em toda a página */
+}
+
+#home {
+    display: flex;
+    min-height: calc(100vh - 91px);
+    position: relative;
+    overflow-x: hidden; /* Oculta qualquer rolagem lateral */
+    max-width: 100vw; /* Define a largura máxima */
+}
+
+#cta {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-top: 5%;
+    box-sizing: border-box; /* Inclui padding e border na largura total */
+}
+
+#cta .title {
+    font-size: 4rem;
+    color: var(--color-neutral-1);
+}
+
+#cta .title span {
+    color: var(--color-primary-6);
+}
+
+#cta .description {
+    font-size: 1.2rem;
+}
+
+#cta_buttons {
+    display: flex;
+    gap: 24px;
+}
+
+#cta_buttons a {
+    text-decoration: none;
+    color: var(--color-neutral-1);
+}
+
+#phone_button {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 8px 14px;
+    font-weight: 500;
+    box-shadow: 0px 0px 12px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+
+#phone_button button {
+    box-shadow: none;
+}
+
+#banner {
+    display: flex;
+    align-items: start;
+    justify-content: end;
+    width: 70%;
+    z-index: 2;
+    overflow: hidden; /* Impede que o conteúdo saia da área do banner */
+}
+
+#banner img {
+    max-height: 700px; /* Altura máxima para a imagem */
+    width: auto; /* Ajusta a largura automaticamente */
+    max-width: 100%; /* Garante que a largura máxima é 100% do contêiner */
+}
+
+.shape {
+    background-color: var(--color-primary-2);
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    border-radius: 40% 30% 0% 20%;
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
+
+@media screen and (max-width: 1170px) {
+    #home {
+        min-height: 100%;
+        padding-top: 0px;
+    }
+
+    #banner,
+    #banner img,
+    #home .shape {
+        display: none; /* Esconde a imagem e a forma em telas menores */
+    }
+
+    #cta {
+        width: 100%; /* O CTA ocupa a largura total */
+        text-align: center;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    #phone_button button {
+        display: none; /* Oculta o botão em telas menores */
+    }
+}
