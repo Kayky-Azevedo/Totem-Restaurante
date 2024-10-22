@@ -87,6 +87,14 @@ body {
     top: 0;
     right: 0;
     z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.shape .logo {
+    max-width: 100%;
+    height: auto;
 }
 
 @media screen and (max-width: 1170px) {

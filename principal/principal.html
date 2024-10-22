@@ -10,11 +10,11 @@
 <body>
   <header class="header">
     <nav class="header--menu">
-      <button class="back-btn">
+      <button class="back-btn" onclick="volta()">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
       <div class="logo-container">
-        <img src="imagens/logo.png" alt="Logo Quick Bite" class="logo">
+        <img src="" alt="Logo Quick Bite" class="logo">
         <span class="greeting">Olá, visitante</span>
       </div>
       <div class="search--box">
@@ -39,20 +39,10 @@
 
   <main>
     <h2 class="section-heading">Menu Food</h2>
-    <div class="menu--list" id="menu--list"></div>
+    <div class="menu--list" id="menu--list"></div> <!-- Lista de categorias -->
 
     <h2 class="section-heading">Itens</h2>
-    <div class="card--list">
-      <div class="card">
-        <img src="imagens/porcoes-e-saladas.png" alt="Salada">
-        <h4 class="card--title">Salada</h4>
-        <p class="card-description">Fresca e saborosa salada mista.</p>
-        <div class="card--price">
-          <div class="price">R$3.50</div>
-          <i class="fa-solid fa-plus add-to-cart"></i>
-        </div>
-      </div>
-    </div>
+    <div class="card--list"></div> <!-- Lista de lanches -->
 
     <div class="sidebar" id="sidebar">
       <div class="sidebar-close">
@@ -70,7 +60,7 @@
         <button class="checkout-btn">Checkout</button>
       </div>
     </div>
-  </main>
+</main>
 
   <script src="script/script1.js"></script>
   <script src="script/script2.js"></script>

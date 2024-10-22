@@ -1,127 +1,110 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const menuList = document.getElementById('menu--list');
-    const cardContainer = document.querySelector('.card--list');
-    const cartItemsContainer = document.querySelector('.cart-items');
-    const cartTotal = document.querySelector('.cart-total');
+const baseURL = 'http://localhost:5000/api';
 
-    const categories = [
-        { name: 'Salada', imgSrc: 'imagens/porcoes-e-saladas.png' },
-        { name: 'Pratos Principais', imgSrc: 'imagens/pratos-principais.png' },
-        { name: 'Sobremesas', imgSrc: 'imagens/sobremesas.png' },
-        { name: 'Bebidas', imgSrc: 'imagens/bebidas.png' },
-        { name: 'Porções', imgSrc: 'imagens/porcoes.png' },
-    ];
-
-    const products = [
-        { image: 'imagens/porcoes-e-saladas.png', title: 'Salada', description: 'Fresca e saborosa salada mista.', price: 3.50, category: 'Salada' },
-        { image: 'imagens/images.jpg', title: 'Prato Principal', description: 'Delicioso prato com carnes.', price: 15.00, category: 'Pratos Principais' },
-        { image: 'imagens/sobremesas.png', title: 'Sobremesa', description: 'Uma sobremesa deliciosa.', price: 7.00, category: 'Sobremesas' },
-        { image: 'imagens/bebidas.png', title: 'Bebida', description: 'Bebidas refrescantes.', price: 5.00, category: 'Bebidas' },
-        { image: 'imagens/porcoes.png', title: 'Porção', description: 'Porções variadas.', price: 10.00, category: 'Porções' },
-    ];
-
-    let cart = [];
-
-    function createCategory(category) {
-        const menuItem = document.createElement('div');
-        menuItem.classList.add('menu--item');
-        menuItem.dataset.category = category.name;
-
-        const img = document.createElement('img');
-        img.src = category.imgSrc;
-        img.alt = category.name;
-
-        const title = document.createElement('h5');
-        title.textContent = category.name;
-
-        menuItem.appendChild(img);
-        menuItem.appendChild(title);
-        menuList.appendChild(menuItem);
-
-        menuItem.addEventListener('click', () => filterProducts(category.name));
-    }
-
-    function createCards(filteredProducts) {
-        cardContainer.innerHTML = '';
-        filteredProducts.forEach(product => {
-            const card = document.createElement('div');
-            card.classList.add('card');
-
-            const img = document.createElement('img');
-            img.src = product.image;
-            img.alt = product.title;
-            card.appendChild(img);
-
-            const title = document.createElement('h4');
-            title.classList.add('card--title');
-            title.textContent = product.title;
-            card.appendChild(title);
-
-            const description = document.createElement('p');
-            description.classList.add('card-description');
-            description.textContent = product.description;
-            card.appendChild(description);
-
-            const priceContainer = document.createElement('div');
-            priceContainer.classList.add('card--price');
-
-            const price = document.createElement('div');
-            price.classList.add('price');
-            price.textContent = `R$${product.price.toFixed(2)}`;
-
-            const addToCartIcon = document.createElement('i');
-            addToCartIcon.classList.add('fa-solid', 'fa-plus', 'add-to-cart');
-            addToCartIcon.addEventListener('click', () => {
-                console.log('Adicionando ao carrinho:', product);
-                addToCart(product);
-            });
-
-            priceContainer.appendChild(price);
-            priceContainer.appendChild(addToCartIcon);
-            card.appendChild(priceContainer);
-
-            cardContainer.appendChild(card);
-        });
-    }
-
-    function filterProducts(category) {
-        const filteredProducts = products.filter(product => product.category === category);
-        createCards(filteredProducts);
-    }
-
-    function addToCart(product) {
-        const existingItem = cart.find(item => item.title === product.title);
-        if (existingItem) {
-            existingItem.quantity++;
-        } else {
-            cart.push({ ...product, quantity: 1 });
+// Função para buscar categorias
+async function fetchCategorias() {
+    try {
+        const response = await fetch('http://localhost:5000/api/categorias');
+        if (!response.ok) {
+            throw new Error('Erro ao buscar categorias');
         }
-        updateCartUI();
+        
+        const categoriaArray = await response.json();
+        console.log("Categorias recebidas:", categoriaArray); // Log para depuração
+
+        // Verifica se a resposta é um array
+        if (!Array.isArray(categoriaArray)) {
+            throw new Error('A resposta não é um array');
+        }
+
+        exibirCategorias(categoriaArray);
+    } catch (error) {
+        console.error("Erro ao buscar categorias:", error);
     }
+}
 
-    function updateCartUI() {
-        cartItemsContainer.innerHTML = '';
-        let total = 0;
+// Função para exibir categorias no HTML
+function exibirCategorias(categoriaArray) {
+    const menuList = document.getElementById('menu--list');
+    menuList.innerHTML = ''; // Limpa a lista antes de adicionar novas categorias
 
-        cart.forEach(item => {
-            const cartItem = document.createElement('div');
-            cartItem.classList.add('cart-item');
+    // Itera sobre as categorias e as exibe
+    categoriaArray.forEach(categoria => {
+        const categoriaDiv = document.createElement('div');
+        categoriaDiv.className = 'categoria';
+        categoriaDiv.innerHTML = `
+            <h3 class="categoria--titulo" onclick="fetchLanches(${categoria.id})">${categoria.nome}</h3>
+        `;
+        menuList.appendChild(categoriaDiv);
+    });
+}
 
-            const title = document.createElement('span');
-            title.textContent = `${item.title} (x${item.quantity})`;
+// Função para buscar lanches por categoria
+async function fetchLanches(categoriaId) {
+    try {
+        const response = await fetch(`http://localhost:5000/api/lanches?categoria_id=${categoriaId}`);
+        if (!response.ok) {
+            throw new Error('Erro ao buscar lanches');
+        }
+        
+        const lanches = await response.json();
+        console.log("Lanches recebidos:", lanches); // Verifique a estrutura aqui
 
-            const price = document.createElement('span');
-            price.textContent = `R$${(item.price * item.quantity).toFixed(2)}`;
-            total += item.price * item.quantity;
+        // Se lanches for um array de arrays, achate-o.
+        const lanchesArray = Array.isArray(lanches) && lanches.length > 0 ? (lanches[0] || []) : [];
 
-            cartItem.appendChild(title);
-            cartItem.appendChild(price);
-            cartItemsContainer.appendChild(cartItem);
+        // Verifique se lanchesArray é um array válido
+        if (!Array.isArray(lanchesArray)) {
+            throw new Error('A resposta não é um array de lanches');
+        }
+
+        exibirLanches(lanchesArray);
+    } catch (error) {
+        console.error("Erro ao buscar lanches:", error);
+    }
+}
+
+function exibirLanches(lanchesArray) {
+    const cardList = document.querySelector('.card--list');
+    cardList.innerHTML = ''; // Limpa a lista antes de adicionar novos lanches
+
+    // Verifica se o array de lanches é realmente um array e não está vazio
+    if (Array.isArray(lanchesArray) && lanchesArray.length > 0) {
+        lanchesArray.forEach(lancheArray => {
+            // Verifica se lancheArray é realmente um array e possui pelo menos 5 elementos
+            if (Array.isArray(lancheArray) && lancheArray.length >= 5) {
+                const id = lancheArray[0]; // ID do lanche
+                const nome = lancheArray[1]; // Nome do lanche
+                const descricao = lancheArray[2]; // Descrição do lanche
+                const preco = parseFloat(lancheArray[3]); // Preço do lanche
+                const imagem_url = lancheArray[4]; // URL da imagem do lanche
+
+                // Verifica se as informações necessárias são válidas
+                if (id !== undefined && nome && descricao && !isNaN(preco) && imagem_url) {
+                    const lancheDiv = document.createElement('div');
+                    lancheDiv.className = 'card';
+                    lancheDiv.innerHTML = `
+                        <img src="${imagem_url}" alt="${nome}">
+                        <h4 class="card--title">${nome}</h4>
+                        <p class="card-description">${descricao}</p>
+                        <div class="card--price">
+                            <div class="price">R$${preco.toFixed(2)}</div>
+                            <i class="fa-solid fa-plus add-to-cart" onclick="adicionarAoCarrinho(${id})"></i>
+                        </div>
+                    `;
+                    cardList.appendChild(lancheDiv);
+                } else {
+                    console.error("Lanche não possui informações válidas:", lancheArray);
+                }
+            } else {
+                console.error("Lanche não é um objeto válido:", lancheArray);
+            }
         });
-
-        cartTotal.textContent = `Total: R$${total.toFixed(2)}`;
+    } else {
+        console.error("Nenhum lanche encontrado.");
     }
+}
 
-    categories.forEach(createCategory);
-    createCards(products);
-});
+
+
+// Chama a função para buscar categorias ao carregar a página
+document.addEventListener('DOMContentLoaded', fetchCategorias);

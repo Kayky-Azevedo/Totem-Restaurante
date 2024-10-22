@@ -160,6 +160,45 @@ body {
     border-radius: 0 150px 100px 0;
 }
 
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1100; /* Certifique-se de que o z-index seja maior que o de outros elementos */
+    display: none;
+}
+
+.modal.active {
+    display: block;
+}
+
+.modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* O fundo fica logo abaixo do modal */
+    display: none;
+}
+
+.modal-background.active {
+    display: block;
+}
+
+
+.modal-background.active {
+    display: block;
+}
+
+
+
 .toggle {
     background-color: orange;
     height: 100%;

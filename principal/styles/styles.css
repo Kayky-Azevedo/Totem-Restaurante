@@ -154,7 +154,7 @@ body {
 
 /* Seção de capa */
 .cover {
-  background-image: url(imagens/banner.png);
+  /* background-image: url(imagens/banner.png); */
   background-size: cover;
   height: 25vh;
   background-position: center;

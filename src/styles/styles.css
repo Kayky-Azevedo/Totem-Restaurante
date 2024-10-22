@@ -51,6 +51,11 @@ section {
     transition: background-color .3s ease;
 }
 
+.btn-default .login {
+    text-decoration: none;
+    color: black;
+}
+
 .btn-default:hover {
     background-color: var(--color-primary-3);
 }

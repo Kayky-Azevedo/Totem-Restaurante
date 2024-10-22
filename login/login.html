@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 
 <head>
     <meta charset="UTF-8">
@@ -20,34 +20,44 @@
     <div class="star"></div>
     <div class="star"></div>
     <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+
 
     <div class="container" id="container">
         <div class="form-container sign-up">
-            <form>
-                <h1>Create Account</h1>
-                <div class="social-icons">
-                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-
-                </div>
-                <span>ou use seu email para se registrar</span>
-                <input type="text" placeholder="Nome">
-                <input type="email" placeholder="Email">
-                <input type="password" placeholder="Senha">
+            <form id="signupForm">
+                <h1>Criar Conta</h1>
+                <br>
+                <input type="text" id="signupNome" placeholder="Nome" required>
+                <input type="email" id="signupEmail" placeholder="Email" required>
+                <input type="password" id="signupSenha" placeholder="Senha" required>
+                <input type="text" id="signupTelefone" placeholder="Telefone" required>
                 <button>Cadastre-se</button>
             </form>
         </div>
         <div class="form-container sign-in">
-            <form>
+            <form id="loginForm">
                 <h1>Login</h1>
-                <div class="social-icons">
-                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-
-                </div>
-                <span>or use your email password</span>
-                <input type="email" placeholder="Email">
-                <input type="password" placeholder="Password">
-                <a href="#">Esqueceu a senha?</a>
-                <button>Login</button>
+                <br>
+                <span>Insira seu email e senha para entrar</span>
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginSenha" placeholder="Password" required>
+                <a href="#" id="forgotPassword">Esqueceu a senha?</a>
+                <button>Entrar</button>
+            </form>
+        </div>
+        <div id="modalBackground" class="modal-background hidden"></div>
+        <div id="resetPasswordModal" class="modal hidden">
+            <form id="resetPasswordForm">
+                <h2>Redefinir Senha</h2>
+                <input type="email" id="email" placeholder="Digite seu email" required>
+                <input type="password" id="newPassword" placeholder="Digite a nova senha" required>
+                <button type="submit">Redefinir Senha</button>
             </form>
         </div>
         <div class="toggle-container">
@@ -55,12 +65,12 @@
                 <div class="toggle-panel toggle-left">
                     <h1>Bem-vindo de volta!</h1>
                     <p>Entre com seus dados pessoais</p>
-                    <button class="hidden" id="login">Sign In</button>
+                    <button class="hidden" id="login">Entrar</button>
                 </div>
                 <div class="toggle-panel toggle-right">
                     <h1>Olá amigo</h1>
                     <p>Entre com seus dados pessoais</p>
-                    <button class="hidden" id="register">Sign Up</button>
+                    <button class="hidden" id="register">Cadastre-se</button>
                 </div>
             </div>
         </div>
