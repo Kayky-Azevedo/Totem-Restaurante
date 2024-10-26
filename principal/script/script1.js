@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cardContainer = document.querySelector('.card--list');
     const cartItemsContainer = document.querySelector('.cart-items');
     const cartTotal = document.querySelector('.cart-total');
+<<<<<<< HEAD
     const cartItemCount = document.querySelector('.cart-icon span');
     const cartIcon = document.querySelector('.cart-icon');
     const sidebar = document.getElementById('sidebar');
@@ -59,11 +60,69 @@ document.addEventListener('DOMContentLoaded', () => {
             const title = document.createElement('h4');
             title.classList.add('card--title');
             title.textContent = nome;
+=======
+
+    const categories = [
+        { name: 'Salada', imgSrc: 'imagens/porcoes-e-saladas.png' },
+        { name: 'Pratos Principais', imgSrc: 'imagens/pratos-principais.png' },
+        { name: 'Sobremesas', imgSrc: 'imagens/sobremesas.png' },
+        { name: 'Bebidas', imgSrc: 'imagens/bebidas.png' },
+        { name: 'Porções', imgSrc: 'imagens/porcoes.png' },
+    ];
+
+    const products = [
+        { image: 'imagens/porcoes-e-saladas.png', title: 'Salada', description: 'Fresca e saborosa salada mista.', price: 3.50, category: 'Salada' },
+        { image: 'imagens/images.jpg', title: 'Prato Principal', description: 'Delicioso prato com carnes.', price: 15.00, category: 'Pratos Principais' },
+        { image: 'imagens/sobremesas.png', title: 'Sobremesa', description: 'Uma sobremesa deliciosa.', price: 7.00, category: 'Sobremesas' },
+        { image: 'imagens/bebidas.png', title: 'Bebida', description: 'Bebidas refrescantes.', price: 5.00, category: 'Bebidas' },
+        { image: 'imagens/porcoes.png', title: 'Porção', description: 'Porções variadas.', price: 10.00, category: 'Porções' },
+    ];
+
+    let cart = [];
+
+    function createCategory(category) {
+        const menuItem = document.createElement('div');
+        menuItem.classList.add('menu--item');
+        menuItem.dataset.category = category.name;
+
+        const img = document.createElement('img');
+        img.src = category.imgSrc;
+        img.alt = category.name;
+
+        const title = document.createElement('h5');
+        title.textContent = category.name;
+
+        menuItem.appendChild(img);
+        menuItem.appendChild(title);
+        menuList.appendChild(menuItem);
+
+        menuItem.addEventListener('click', () => filterProducts(category.name));
+    }
+
+    function createCards(filteredProducts) {
+        cardContainer.innerHTML = '';
+        filteredProducts.forEach(product => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+
+            const img = document.createElement('img');
+            img.src = product.image;
+            img.alt = product.title;
+            card.appendChild(img);
+
+            const title = document.createElement('h4');
+            title.classList.add('card--title');
+            title.textContent = product.title;
+>>>>>>> origin/integration
             card.appendChild(title);
 
             const description = document.createElement('p');
             description.classList.add('card-description');
+<<<<<<< HEAD
             description.textContent = descricao;
+=======
+            description.textContent = product.description;
+>>>>>>> origin/integration
             card.appendChild(description);
 
             const priceContainer = document.createElement('div');
@@ -71,13 +130,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const price = document.createElement('div');
             price.classList.add('price');
+<<<<<<< HEAD
             price.textContent = `R$${parseFloat(preco).toFixed(2)}`;
+=======
+            price.textContent = `R$${product.price.toFixed(2)}`;
+>>>>>>> origin/integration
 
             const addToCartIcon = document.createElement('i');
             addToCartIcon.classList.add('fa-solid', 'fa-plus', 'add-to-cart');
             addToCartIcon.addEventListener('click', () => {
+<<<<<<< HEAD
                 console.log('Adicionando ao carrinho:', { id, nome, preco, imagem });
                 addToCart({ id, nome, preco: parseFloat(preco), imagem });
+=======
+                console.log('Adicionando ao carrinho:', product);
+                addToCart(product);
+>>>>>>> origin/integration
             });
 
             priceContainer.appendChild(price);
@@ -88,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+<<<<<<< HEAD
     function addToCart(product) {
         const existingProduct = cart.find(item => item.id === product.id);
 
@@ -152,10 +221,45 @@ document.addEventListener('DOMContentLoaded', () => {
             quantityControls.appendChild(minusButton);
             quantityControls.appendChild(quantityLabel);
             quantityControls.appendChild(plusButton);
+=======
+    function filterProducts(category) {
+        const filteredProducts = products.filter(product => product.category === category);
+        createCards(filteredProducts);
+    }
+
+    function addToCart(product) {
+        const existingItem = cart.find(item => item.title === product.title);
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push({ ...product, quantity: 1 });
+        }
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+
+        cart.forEach(item => {
+            const cartItem = document.createElement('div');
+            cartItem.classList.add('cart-item');
+
+            const title = document.createElement('span');
+            title.textContent = `${item.title} (x${item.quantity})`;
+
+            const price = document.createElement('span');
+            price.textContent = `R$${(item.price * item.quantity).toFixed(2)}`;
+            total += item.price * item.quantity;
+
+            cartItem.appendChild(title);
+            cartItem.appendChild(price);
+>>>>>>> origin/integration
             cartItemsContainer.appendChild(cartItem);
         });
 
         cartTotal.textContent = `Total: R$${total.toFixed(2)}`;
+<<<<<<< HEAD
         cartItemCount.textContent = cart.reduce((acc, item) => acc + item.quantity, 0); // Atualiza o contador do carrinho
     }
 
@@ -185,4 +289,10 @@ document.addEventListener('DOMContentLoaded', () => {
     closeButton.addEventListener('click', () => {
         sidebar.classList.remove('open');
     });
+=======
+    }
+
+    categories.forEach(createCategory);
+    createCards(products);
+>>>>>>> origin/integration
 });
