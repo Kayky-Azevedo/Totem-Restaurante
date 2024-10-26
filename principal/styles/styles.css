@@ -289,7 +289,7 @@ body {
 
 /* Sidebar do carrinho */
 .sidebar {
-  width: 350px; /* Largura desejada */
+  width: 450px; /* Largura desejada */
   max-width: 90vw; /* Limita a largura a 90% da viewport */
   height: 100%; /* Ocupa toda a altura da tela */
   position: fixed;

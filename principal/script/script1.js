@@ -1,110 +1,188 @@
-const baseURL = 'http://localhost:5000/api';
-
-// Função para buscar categorias
-async function fetchCategorias() {
-    try {
-        const response = await fetch('http://localhost:5000/api/categorias');
-        if (!response.ok) {
-            throw new Error('Erro ao buscar categorias');
-        }
-        
-        const categoriaArray = await response.json();
-        console.log("Categorias recebidas:", categoriaArray); // Log para depuração
-
-        // Verifica se a resposta é um array
-        if (!Array.isArray(categoriaArray)) {
-            throw new Error('A resposta não é um array');
-        }
-
-        exibirCategorias(categoriaArray);
-    } catch (error) {
-        console.error("Erro ao buscar categorias:", error);
-    }
-}
-
-// Função para exibir categorias no HTML
-function exibirCategorias(categoriaArray) {
+document.addEventListener('DOMContentLoaded', () => {
     const menuList = document.getElementById('menu--list');
-    menuList.innerHTML = ''; // Limpa a lista antes de adicionar novas categorias
+    const cardContainer = document.querySelector('.card--list');
+    const cartItemsContainer = document.querySelector('.cart-items');
+    const cartTotal = document.querySelector('.cart-total');
+    const cartItemCount = document.querySelector('.cart-icon span');
+    const cartIcon = document.querySelector('.cart-icon');
+    const sidebar = document.getElementById('sidebar');
+    const closeButton = document.querySelector('.sidebar-close');
 
-    // Itera sobre as categorias e as exibe
-    categoriaArray.forEach(categoria => {
-        const categoriaDiv = document.createElement('div');
-        categoriaDiv.className = 'categoria';
-        categoriaDiv.innerHTML = `
-            <h3 class="categoria--titulo" onclick="fetchLanches(${categoria.id})">${categoria.nome}</h3>
-        `;
-        menuList.appendChild(categoriaDiv);
-    });
-}
+    let cart = [];
+    let totalAmount = 0;
 
-// Função para buscar lanches por categoria
-async function fetchLanches(categoriaId) {
-    try {
-        const response = await fetch(`http://localhost:5000/api/lanches?categoria_id=${categoriaId}`);
-        if (!response.ok) {
-            throw new Error('Erro ao buscar lanches');
-        }
-        
-        const lanches = await response.json();
-        console.log("Lanches recebidos:", lanches); // Verifique a estrutura aqui
+    fetch('http://localhost:5000/api/categorias')
+        .then(response => response.json())
+        .then(categories => {
+            categories.forEach(createCategory);
+        })
+        .catch(error => console.error('Erro ao buscar categorias:', error));
 
-        // Se lanches for um array de arrays, achate-o.
-        const lanchesArray = Array.isArray(lanches) && lanches.length > 0 ? (lanches[0] || []) : [];
+    function createCategory(category) {
+        const menuItem = document.createElement('div');
+        menuItem.classList.add('menu--item');
+        menuItem.dataset.category = category.nome;
 
-        // Verifique se lanchesArray é um array válido
-        if (!Array.isArray(lanchesArray)) {
-            throw new Error('A resposta não é um array de lanches');
-        }
+        const title = document.createElement('h5');
+        title.textContent = category.nome;
 
-        exibirLanches(lanchesArray);
-    } catch (error) {
-        console.error("Erro ao buscar lanches:", error);
+        menuItem.appendChild(title);
+        menuList.appendChild(menuItem);
+
+        menuItem.addEventListener('click', () => filterProducts(category.id));
     }
-}
 
-function exibirLanches(lanchesArray) {
-    const cardList = document.querySelector('.card--list');
-    cardList.innerHTML = ''; // Limpa a lista antes de adicionar novos lanches
+    function filterProducts(categoriaId) {
+        fetch(`http://localhost:5000/api/lanches?categoria_id=${categoriaId}`)
+            .then(response => response.json())
+            .then(products => {
+                createCards(products);
+            })
+            .catch(error => console.error('Erro ao buscar lanches:', error));
+    }
 
-    // Verifica se o array de lanches é realmente um array e não está vazio
-    if (Array.isArray(lanchesArray) && lanchesArray.length > 0) {
-        lanchesArray.forEach(lancheArray => {
-            // Verifica se lancheArray é realmente um array e possui pelo menos 5 elementos
-            if (Array.isArray(lancheArray) && lancheArray.length >= 5) {
-                const id = lancheArray[0]; // ID do lanche
-                const nome = lancheArray[1]; // Nome do lanche
-                const descricao = lancheArray[2]; // Descrição do lanche
-                const preco = parseFloat(lancheArray[3]); // Preço do lanche
-                const imagem_url = lancheArray[4]; // URL da imagem do lanche
+    function createCards(filteredProducts) {
+        cardContainer.innerHTML = '';
 
-                // Verifica se as informações necessárias são válidas
-                if (id !== undefined && nome && descricao && !isNaN(preco) && imagem_url) {
-                    const lancheDiv = document.createElement('div');
-                    lancheDiv.className = 'card';
-                    lancheDiv.innerHTML = `
-                        <img src="${imagem_url}" alt="${nome}">
-                        <h4 class="card--title">${nome}</h4>
-                        <p class="card-description">${descricao}</p>
-                        <div class="card--price">
-                            <div class="price">R$${preco.toFixed(2)}</div>
-                            <i class="fa-solid fa-plus add-to-cart" onclick="adicionarAoCarrinho(${id})"></i>
-                        </div>
-                    `;
-                    cardList.appendChild(lancheDiv);
-                } else {
-                    console.error("Lanche não possui informações válidas:", lancheArray);
-                }
-            } else {
-                console.error("Lanche não é um objeto válido:", lancheArray);
-            }
+        filteredProducts.forEach(product => {
+            const [id, nome, descricao, preco, categoriaId, imagem] = product;
+
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.dataset.id = id;
+
+            const img = document.createElement('img');
+            img.src = imagem;
+            img.alt = nome;
+            card.appendChild(img);
+
+            const title = document.createElement('h4');
+            title.classList.add('card--title');
+            title.textContent = nome;
+            card.appendChild(title);
+
+            const description = document.createElement('p');
+            description.classList.add('card-description');
+            description.textContent = descricao;
+            card.appendChild(description);
+
+            const priceContainer = document.createElement('div');
+            priceContainer.classList.add('card--price');
+
+            const price = document.createElement('div');
+            price.classList.add('price');
+            price.textContent = `R$${parseFloat(preco).toFixed(2)}`;
+
+            const addToCartIcon = document.createElement('i');
+            addToCartIcon.classList.add('fa-solid', 'fa-plus', 'add-to-cart');
+            addToCartIcon.addEventListener('click', () => {
+                console.log('Adicionando ao carrinho:', { id, nome, preco, imagem });
+                addToCart({ id, nome, preco: parseFloat(preco), imagem });
+            });
+
+            priceContainer.appendChild(price);
+            priceContainer.appendChild(addToCartIcon);
+            card.appendChild(priceContainer);
+
+            cardContainer.appendChild(card);
         });
-    } else {
-        console.error("Nenhum lanche encontrado.");
     }
-}
 
+    function addToCart(product) {
+        const existingProduct = cart.find(item => item.id === product.id);
 
+        if (existingProduct) {
+            existingProduct.quantity += 1;
+            console.log('Produto existente, aumentando quantidade:', existingProduct);
+        } else {
+            product.quantity = 1;
+            cart.push(product);
+            console.log('Novo produto, adicionando ao carrinho:', product);
+        }
 
-// Chama a função para buscar categorias ao carregar a página
-document.addEventListener('DOMContentLoaded', fetchCategorias);
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        cartItemsContainer.innerHTML = ''; // Limpa o container antes de adicionar novos itens
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            const cartItem = document.createElement('div');
+            cartItem.classList.add('cart-item');
+
+            // Adiciona a imagem do produto
+            const img = document.createElement('img');
+            img.src = item.imagem;
+            img.alt = item.nome;
+            img.classList.add('cart-item-img'); // Adiciona uma classe para estilização, se necessário
+            cartItem.appendChild(img);
+
+            const title = document.createElement('span');
+            title.textContent = `${item.nome}`;
+
+            const price = document.createElement('span');
+            price.textContent = `R$${(item.preco * item.quantity).toFixed(2)}`;
+            total += item.preco * item.quantity;
+
+            // Botões de aumentar e diminuir quantidade
+            const quantityControls = document.createElement('div');
+            quantityControls.classList.add('quantity-controls');
+
+            const minusButton = document.createElement('button');
+            minusButton.classList.add('minus-btn');
+            minusButton.textContent = '-';
+            minusButton.addEventListener('click', () => {
+                decreaseItemQuantity(index);
+            });
+
+            const quantityLabel = document.createElement('span');
+            quantityLabel.textContent = ` x${item.quantity} `;
+
+            const plusButton = document.createElement('button');
+            plusButton.classList.add('plus-btn');
+            plusButton.textContent = '+';
+            plusButton.addEventListener('click', () => {
+                increaseItemQuantity(index);
+            });
+
+            cartItem.appendChild(quantityControls);
+            cartItem.appendChild(title);
+            cartItem.appendChild(price);
+            quantityControls.appendChild(minusButton);
+            quantityControls.appendChild(quantityLabel);
+            quantityControls.appendChild(plusButton);
+            cartItemsContainer.appendChild(cartItem);
+        });
+
+        cartTotal.textContent = `Total: R$${total.toFixed(2)}`;
+        cartItemCount.textContent = cart.reduce((acc, item) => acc + item.quantity, 0); // Atualiza o contador do carrinho
+    }
+
+    function increaseItemQuantity(index) {
+        cart[index].quantity++;
+        updateCartUI();
+    }
+
+    function decreaseItemQuantity(index) {
+        const item = cart[index];
+
+        if (item.quantity > 1) {
+            item.quantity--;
+        } else {
+            // Remove o item se a quantidade for 1 e o botão "-" for pressionado
+            cart.splice(index, 1);
+        }
+
+        updateCartUI();
+    }
+
+    // Manipulação da Sidebar
+    cartIcon.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+    });
+
+    closeButton.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+    });
+});
