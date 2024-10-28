@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <title>Tela de Pagamento</title>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Formulário Cartão de Crédito -->
+        <form id="formPagamento" class="formulario" action="#">
+            <div class="linhas">
+                <div class="colunas">
+                    <h3 class="titulo">Endereço de Cobrança</h3>
+                    <div class="entrada-caixa">
+                        <span>Nome Completo :</span>
+                        <input type="text" id="nomeCompleto" placeholder="Rafael Cardoso Cordeiro">
+                    </div>
+                    <div class="entrada-caixa">
+                        <span>E-mail :</span>
+                        <input type="email" id="email" placeholder="exemplo@gmail.com">
+                    </div>
+                    <div class="entrada-caixa">
+                        <span>Endereço :</span>
+                        <input type="text" id="endereco" placeholder="Rua - Nº - Bairro">
+                    </div>
+                    <div class="entrada-caixa">
+                        <span>Cidade :</span>
+                        <input type="text" id="cidade" placeholder="Limeira">
+                    </div>
+                    <div class="flex">
+                        <div class="entrada-caixa">
+                            <span>Estado :</span>
+                            <input type="text" id="estado" placeholder="SP">
+                        </div>
+                        <div class="entrada-caixa">
+                            <span>Cep :</span>
+                            <input type="number" id="cep" placeholder="13481617">
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="colunas">
+                    <h3 class="titulo">Pagamento</h3>
+                    <div class="entrada-caixa">
+                        <span>Tipos de Cartões Aceitos :</span>
+                        <img src="imagem/bandeiras.png" alt="Bandeira do Cartão de Débito" class="imagemDebito" style="cursor: pointer;">
+                        <button type="button" id="btnPix" class="btn-pix">Pagar via Pix</button>
+                    </div>
+                    <div class="entrada-caixa">
+                        <span>Nome no Cartão :</span>
+                        <input type="text" id="nomeCartao" placeholder="Rafael C Cordeiro">
+                    </div>
+                    <div class="entrada-caixa">
+                        <span>Número do Cartão de Crédito :</span>
+                        <input type="text" id="numeroCartao" placeholder="0001200044455345">
+                    </div>
+                    <div class="entrada-caixa">
+                        <span>Expira Mês :</span>
+                        <input type="text" id="expiraMes" placeholder="Setembro">
+                    </div>
+                    <div class="flex">
+                        <div class="entrada-caixa">
+                            <span>Expira Ano :</span>
+                            <input type="number" id="expiraAno" placeholder="2027">
+                        </div>
+                        <div class="entrada-caixa">
+                            <span>CVV :</span>
+                            <input type="number" id="cvv" placeholder="123">
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <div class="escolha-opcao">
+                            <input type="checkbox" name="credito">
+                            <label for="credito"> Crédito</label>
+                        </div>
+                        <div class="escolha-opcao">
+                            <input type="checkbox" name="debito">
+                            <label for="debito"> Débito</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="btnSubmit" class="btn">Pagar</button>
+        </form>
+         <!-- Formulário Pix -->
+         <form id="formPix" class="formulario" action="#" style="display: none;">
+            <h3 class="titulo">Pagamento via Pix</h3>
+            <div class="entrada-caixa">
+                <span>Nome Completo:</span>
+                <input type="text" id="nomeCompletoPix" placeholder="Rafael Cardoso Cordeiro" required>
+            </div>
+            <div class="entrada-caixa">
+                <span>Valor:</span>
+                <input type="text" id="valorPix" placeholder="R$ 0,00" required>
+            </div>
+            <canvas id="qrcode" style="display: none; margin-top: 10px;"></canvas>
+            <p id="instructions" style="display: none;">Escaneie o QR Code abaixo com seu aplicativo bancário.</p>
+            <button type="button" id="btnSubmitPix" class="btn">Gerar QRCode</button>
+        </form>
+
+
+    </div>
+
+
+    <script>
+        document.getElementById('btnSubmit').addEventListener('click', function() {
+            // Capturando os valores dos inputs
+            var nomeCompleto = document.getElementById('nomeCompleto').value;
+            var email = document.getElementById('email').value;
+            var endereco = document.getElementById('endereco').value;
+            var cidade = document.getElementById('cidade').value;
+            var estado = document.getElementById('estado').value;
+            var cep = document.getElementById('cep').value;
+            var nomeCartao = document.getElementById('nomeCartao').value;
+            var numeroCartao = document.getElementById('numeroCartao').value;
+            var expiraMes = document.getElementById('expiraMes').value;
+            var expiraAno = document.getElementById('expiraAno').value;
+            var cvv = document.getElementById('cvv').value;
+
+            // Validação simples
+            if (!nomeCompleto || !email || !endereco || !cidade || !estado || !cep || !nomeCartao || !numeroCartao || !expiraMes || !expiraAno || !cvv) {
+                alert('Por favor, preencha todos os campos!');
+                return;
+            }
+
+            // Validação adicional para o formato dos dados
+            var emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+            if (!emailPattern.test(email)) {
+                alert('Por favor, insira um e-mail válido!');
+                return;
+            }
+
+            if (numeroCartao.length !== 16 || isNaN(numeroCartao)) {
+                alert('Por favor, insira um número de cartão de crédito válido (16 dígitos)!');
+                return;
+            }
+
+            if (cvv.length !== 3 || isNaN(cvv)) {
+                alert('Por favor, insira um CVV válido (3 dígitos)!');
+                return;
+            }
+
+            // Exemplo de sucesso
+            alert('Pagamento processado com sucesso!');
+        });
+
+        // Mostrar formulário Pix ao clicar no botão "Pagar via Pix"
+        document.getElementById('btnPix').addEventListener('click', function() {
+            document.getElementById('formPagamento').style.display = 'none';
+            document.getElementById('formPix').style.display = 'block';
+        });
+
+        // Gerar QRCode ao clicar no botão "Gerar QRCode"
+        document.getElementById('btnSubmitPix').addEventListener('click', function() {
+            var nomeCompletoPix = document.getElementById('nomeCompletoPix').value;
+            var valorPix = document.getElementById('valorPix').value;
+
+            // Validação dos campos do formulário Pix
+            if (!nomeCompletoPix || !valorPix) {
+                alert('Por favor, preencha todos os campos do pagamento via Pix!');
+                return;
+            }
+
+            // Exibir o QRCode e as instruções
+            var qr = new QRious({
+                element: document.getElementById('qrcode'),
+                size: 200,
+                value: 'Pagamento via Pix - Nome: ' + nomeCompletoPix + ', Valor: ' + valorPix
+            });
+
+            document.getElementById('qrcode').style.display = 'block';
+            document.getElementById('instructions').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+@import url('https//fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+
+*{
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins','sans-serif';
+}
+
+.container{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #1f242d;
+    padding: 25px;
+
+}
+
+.container form{
+    width: 700px;
+    padding: 40px;
+    background: #fff;
+    border-radius: 10px;
+}
+
+form .linhas{
+
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.linhas .colunas{
+
+    flex: 1 1 250px;
+}
+
+.colunas .titulo{
+
+    font-size: 20px;
+    color: #333;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+
+}
+
+.colunas .entrada-caixa{
+    margin: 10px 0;
+
+}
+.entrada-caixa span{
+
+    display: block;
+    margin: 10px 0;
+}
+.entrada-caixa img {
+    width: 45%;
+    filter: drop-shadow(0 0 1px #000);
+}
+
+.entrada-caixa input{
+
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+
+.colunas .flex{
+
+    display: flex;
+    gap: 15px;
+    justify-content: space-evenly;
+}
+.colunas .flex .escolha-opcao{
+
+    margin: 10px 0;
+}
+
+.flex .entrada-caixa{
+
+    margin-top: 5px;
+}
+
+
+
+.escolha-opcao {
+
+    display: flex;
+    gap: 5px;
+}
+.entrada-caixa .btn-pix{
+
+    width: 50%;
+    height: 38px;
+    padding: 10px;
+    background: #8175d3;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #fff;
+    cursor: pointer;
+    transition: .5s;
+}
+
+form .btn{
+
+    width: 100%;
+    padding: 12px;
+    background: #8175d3;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    font-size: 17px;
+    color: #fff;
+    cursor: pointer;
+    transition: .5s;
+
+
+}
+.entrada-caixa .btn-pix:hover{
+
+    background: #6a5acd;
+
+
+}
+
+form .btn:hover{
+    background: #6a5acd;
+}
