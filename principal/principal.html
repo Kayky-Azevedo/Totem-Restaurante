@@ -1,68 +1,62 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quick Bite</title>
-  <link rel="stylesheet" href="styles/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Bite</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 </head>
 <body>
-  <header class="header">
-    <nav class="header--menu">
-      <button class="back-btn" onclick="volta()">
-        <i class="fa-solid fa-arrow-left"></i>
-      </button>
-      <div class="logo-container">
-        <img src="" alt="Logo Quick Bite" class="logo">
-        <span class="greeting">Olá, visitante</span>
-      </div>
-      <div class="search--box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Search">
-      </div>
-      <div class="cart-icon" id="cart-icon">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span>0</span>
-      </div>
-    </nav>
-  </header>
-
-  <!-- Seção de capa -->
-  <section class="cover">
-    <div class="cover--overlay">
-      <h1>Quick Bite
-        <span class="slogan">where Taste Takes the Fast Lane</span>
-      </h1>
-    </div>
-  </section>
-
-  <main>
-    <h2 class="section-heading">Menu Food</h2>
-    <div class="menu--list" id="menu--list"></div> <!-- Lista de categorias -->
-
-    <h2 class="section-heading">Itens</h2>
-    <div class="card--list"></div> <!-- Lista de lanches -->
-
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-close">
-        <i class="fa-solid fa-close"></i>
-      </div>
-      <div class="cart-menu">
-        <h3>My Cart</h3>
-        <div class="cart-items"></div>
-      </div>
-      <div class="sidebar--footer">
-        <div class="total--amount">
-          <h5>Total</h5>
-          <div class="cart-total">R$0.00</div>
+    <header class="header">
+        <nav class="header--menu">
+            <button class="back-btn" onclick="volta()">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="logo-container">
+              <img src="../src/imgs/logo.png" alt="Logo Quick Bite" class="logo">
+              <span class="greeting" id="greeting">Olá, visitante</span>
+          </div>
+          
+            <div class="search--box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search">
+            </div>
+            <div class="cart-icon" id="openCartButton">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>0</span>
+            </div>
+        </nav>
+    </header>
+    <section class="cover">
+        <div class="cover--overlay">
+            <h1>Quick Bite
+                <span class="slogan">where Taste Takes the Fast Lane</span>
+            </h1>
         </div>
-        <button class="checkout-btn">Checkout</button>
-      </div>
-    </div>
-</main>
-
-  <script src="script/script1.js"></script>
-  <!-- <script src="script/script2.js"></script> -->
+    </section>
+    <main>
+        <h2 class="section-heading">Menu Food</h2>
+        <div class="menu--list" id="menu--list"></div>
+        <h2 class="section-heading">Itens</h2>
+        <div class="card--list"></div>
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-close">
+                <i class="fa-solid fa-close"></i>
+            </div>
+            <div class="cart-menu">
+                <h3>My Cart</h3>
+                <div class="cart-items"></div>
+            </div>
+            <div class="sidebar--footer">
+                <div class="total--amount">
+                    <h5>Total</h5>
+                    <div class="cart-total">R$0.00</div>
+                </div>
+                <button class="checkout-btn" id="finalizeOrderButton">Checkout</button>
+            </div>
+        </div>
+    </main>
+    <script src="script/script1.js"></script>
 </body>
 </html>
