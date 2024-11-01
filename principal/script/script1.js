@@ -328,4 +328,46 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     loadCartFromDatabase(); // Carrega o carrinho quando a página é carregada
+
+    async function checkout() {
+        const userId = sessionStorage.getItem('userId');
+        if (!userId) {
+            console.error("Erro: userId está indefinido. Verifique se o usuário está logado.");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    usuario_id: userId,
+                    itens: cart,
+                    status_pagamento: 'pendente'
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                const pedidoId = data.pedido_id;
+                console.log('Pedido criado com sucesso', pedidoId);
+                sessionStorage.setItem('pedidoId', pedidoId);
+                window.location.href = '../pagamento/index.html';
+            } else {
+                const error = await response.json();
+                console.error('Erro ao criar pedido:', error.error);
+            }
+
+        } catch (error) {
+            console.error('Erro ao processar o pedido:', error.message);
+        }
+    }
+
+    document.getElementById('finalizeOrderButton').addEventListener('click', async (event) => {
+        event.preventDefault();
+        if (!cart || cart.length === 0) {
+            alert("O carrinho está vazio! Adicione itens antes de prosseguir para o pagamento.");
+            return;
+        }
+        await checkout();
+    });
 });

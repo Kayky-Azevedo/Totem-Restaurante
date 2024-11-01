@@ -47,28 +47,39 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     const email = document.getElementById('loginEmail').value;
     const senha = document.getElementById('loginSenha').value;
 
-    const response = await fetch('http://localhost:5000/api/usuarios/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',  // Garante que o cookie de sessão seja incluído
-        body: JSON.stringify({ email: email, senha: senha }) // Usa as variáveis reais
-    });
+    // Credenciais padrão do administrador
+    const adminEmail = "admin@gmail.com";
+    const adminSenha = "admin";
 
-    const data = await response.json();
-    if (response.ok) {
-        console.log(data)
-        const userId = data.user_id;
-        const userName = data.name;
-        sessionStorage.setItem('userId', userId);
-        sessionStorage.setItem('userName', userName);
-        // Carrega o carrinho do usuário
-        const cartResponse = await fetch(`http://localhost:5000/api/carrinho/${userId}`, {
-            credentials: 'include' // Inclui o cookie de sessão nesta requisição também
-        });
-        const userCart = await cartResponse.json();
-        cart = userCart; // Atualiza a variável cart com os itens salvos
+    if (email === adminEmail && senha === adminSenha) {
+        // Redireciona para o painel do administrador se as credenciais correspondem às do admin
+        window.location.href = '../admin/principal/escolhas.html';
+    } else {
+        try {
+            const response = await fetch('http://localhost:5000/api/usuarios/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ email: email, senha: senha })
+            });
 
-        window.location.href = '../principal/principal.html';
+            const data = await response.json();
+            if (response.ok) {
+                const userId = data.user_id;
+                const userName = data.name;
+
+                sessionStorage.setItem('userId', userId);
+                sessionStorage.setItem('userName', userName);
+
+                // Redireciona para a página principal do usuário comum
+                window.location.href = '../principal/principal.html';
+            } else {
+                alert(data.error || 'Erro ao fazer login');
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+            alert('Erro ao fazer login');
+        }
     }
 });
 

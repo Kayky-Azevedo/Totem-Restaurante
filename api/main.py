@@ -93,7 +93,13 @@ def criar_tabelas():
             metodo_pagamento VARCHAR(50),
             status_pagamento VARCHAR(20) DEFAULT 'pendente',
             valor_pagamento DECIMAL(10, 2) NOT NULL,
-            data_pagamento TIMESTAMP,
+            data_pagamento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            nome_completo VARCHAR(100),
+            email VARCHAR(100),
+            endereco VARCHAR(200),
+            cidade VARCHAR(50),
+            estado VARCHAR(50),
+            cep VARCHAR(20),
             FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
         );
     ''')
@@ -381,22 +387,75 @@ def criar_pedido():
     finally:
         con.close()
 
+@app.route('/api/checkout', methods=['POST'])
+def checkout():
+    con = get_connection()
+    data = request.json
+    usuario_id = data.get('usuario_id')
+    itens = data.get('itens')  # Lista de itens no carrinho
+
+    total = sum(item['preco'] * item.get('quantidade', 1) for item in itens)
+
+    try:
+        con.execute('INSERT INTO pedidos (usuario_id, total) VALUES (?, ?)', (usuario_id, total))
+        pedido_id = con.execute('SELECT id FROM pedidos ORDER BY id DESC LIMIT 1').fetchone()[0]
+
+        for item in itens:
+            lanche_id = item['id']
+            quantidade = item.get('quantidade', 1)
+            preco_unitario = item['preco']
+            con.execute('''INSERT INTO pedido_itens (pedido_id, lanche_id, quantidade, preco_unitario) 
+                           VALUES (?, ?, ?, ?)''', (pedido_id, lanche_id, quantidade, preco_unitario))
+
+        # Limpar o carrinho do usuário
+        con.execute('DELETE FROM carrinho WHERE user_id = ?', (usuario_id,))
+        session[pedido_id] = pedido_id
+        con.commit()
+        return jsonify({'message': 'Pedido criado com sucesso!', 'pedido_id': session[pedido_id]}), 201
+
+    except Exception as e:
+        con.rollback()
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        con.close()
+
 # ==================== ROTAS DE PAGAMENTOS ====================
 
-@app.route('/api/pagamentos', methods=['POST'])
-def registrar_pagamento():
-  con = get_connection()
-  data = request.json
-  pedido_id = data.get('pedido_id')
-  metodo_pagamento = data.get('metodo_pagamento')
-  valor_pagamento = data.get('valor_pagamento')
+@app.route('/api/pagamento', methods=['POST'])
+def pagamento():
+    con = get_connection()
+    data = request.json
+    pedido_id = data.get('pedido_id')
+    metodo_pagamento = data.get('metodo_pagamento', 'Cartão de Crédito')
+    status_pagamento = data.get('status_pagamento', 'pago')
+    valor_pagamento = data.get('valor_pagamento')
+    nome_completo = data.get('nome_completo')
+    email = data.get('email')
+    endereco = data.get('endereco')
+    cidade = data.get('cidade')
+    estado = data.get('estado')
+    cep = data.get('cep')
 
-  con.execute('''
-      INSERT INTO pagamentos (pedido_id, metodo_pagamento, valor_pagamento) 
-      VALUES (?, ?, ?)
-  ''', (pedido_id, metodo_pagamento, valor_pagamento))
+    try:
+        # Atualizar o status do pagamento para "pago"
+        con.execute('UPDATE pedidos SET status_pagamento = ? WHERE id = ?', (status_pagamento, pedido_id))
 
-  return jsonify({'message': 'Pagamento registrado com sucesso!'}), 201
+        # Inserir registro na tabela de pagamentos
+        con.execute('''INSERT INTO pagamentos (pedido_id, metodo_pagamento, status_pagamento, valor_pagamento, 
+                                               data_pagamento, nome_completo, email, endereco, cidade, estado, cep)
+                       VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)''', 
+                   (pedido_id, metodo_pagamento, status_pagamento, valor_pagamento, 
+                    nome_completo, email, endereco, cidade, estado, cep))
+
+        con.commit()
+        return jsonify({'message': 'Pagamento confirmado com sucesso!'}), 200
+
+    except Exception as e:
+        con.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        con.close()
 
 con.close()
 # Executar o servidor Flask

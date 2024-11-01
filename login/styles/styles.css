@@ -8,7 +8,7 @@
 }
 
 body {
-    background: linear-gradient(-90deg, rgba(255, 165, 0, 1) 30%, rgba(255, 94, 0, 1) 100%);    
+    background: #fff9ea;    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -47,7 +47,7 @@ body {
 }
 
 .container button {
-    background-color: rgb(83, 80, 231);
+    background-color: orange;
     color: #fff;
     font-size: 12px;
     padding: 10px 45px;
@@ -197,14 +197,34 @@ body {
     display: block;
 }
 
+.password-container {
+    position: relative;
+    color: #000;
+    display: flex;
+    align-items: center;
+}
+
+#password {
+    padding-right: 30px;
+}
+
+#togglePassword {
+    color: #000;
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
 
 
 .toggle {
     background-color: orange;
     height: 100%;
-    background: rgb(131,58,180);
-    background: linear-gradient(90deg, rgb(25, 178, 212) 0%, rgb(67, 44, 181) 0%, rgb(175, 2, 255) 100%);
-    color: #fff;
+    /* background: rgb(131,58,180); */
+    background: linear-gradient(90deg, orange 100%, #ffcb45 0%, #ffe100 0%);
+    color: #000;
     position: relative;
     left: -100%;
     height: 100%;

@@ -99,7 +99,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background-color: var(--decent-color); /* Verde claro */
+  background-color: #d4d4d3; /* Verde claro */
   border-radius: 10px;
   padding: 0 1rem;
   max-width: 400px; /* Largura máxima da barra de pesquisa */
@@ -115,7 +115,7 @@ body {
   background: transparent;
   padding: 10px;
   width: 100%;
-  color: var(--color-neutral-1); /* Preto */
+  color: orange; /* Preto */
   font-size: 16px;
 }
 
@@ -207,16 +207,16 @@ body {
   display: flex;
   align-items: center;
   flex-direction: column;
-  border: 2px solid var(--decent-color); /* Verde claro */
+  border: 2px solid #ffcb45; /* Verde claro */
   padding: 10px 13px;
   border-radius: 10px;
-  color: var(--color-primary-4); /* Amarelo mais forte */
+  color: #000; /* Amarelo mais forte */
   transition: transform 0.3s, background-color 0.3s;
 }
 
 .menu--item:hover {
   transform: scale(1.05);
-  background-color: var(--decent-color); /* Verde claro */
+  background-color: #ffcb45; /* Verde claro */
 }
 
 .menu--item img {
@@ -243,7 +243,7 @@ body {
   background: var(--pri-color); /* Laranja */
   box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
   text-align: center;
-  color: var(--color-primary-4); /* Amarelo mais forte */
+  color: #68410e; /* Amarelo mais forte */
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
@@ -261,7 +261,7 @@ body {
 
 .card-description {
   font-size: 14px;
-  color: var(--color-primary-3); /* Amarelo pálido */
+  color: #68410e; /* Amarelo pálido */
   margin: 5px 0;
   flex-grow: 1; /* Permite que a descrição ocupe o espaço disponível */
   overflow: hidden; /* Esconde o texto que ultrapassar o limite */
@@ -277,13 +277,13 @@ body {
 }
 
 .card--price .price {
-  color: var(--color-primary-5); /* Amarelo médio */
+  color: #000; /* Amarelo médio */
   font-weight: 600;
 }
 
 .add-to-cart {
-  background: var(--color-primary-2); /* Amarelo claro */
-  color: white;
+  background: var(--color-primary-3); /* Amarelo claro */
+  color: #68410e;
   border-radius: 50%;
   padding: 5px;
   cursor: pointer;
