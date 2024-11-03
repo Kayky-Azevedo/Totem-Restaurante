@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('openCartButton').addEventListener('click', async (event) => {
         event.preventDefault();
+        event.stopPropagation();
         await loadCartFromDatabase();
         sidebar.style.display = 'block';  // Abre o sidebar
     });
@@ -110,30 +111,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function filterProducts(categoriaId) {
-        fetch(`http://localhost:5000/api/lanches?categoria_id=${categoriaId}`)
+        fetch(`http://localhost:5000/api/lanches/categoria/${categoriaId}`)
             .then(response => response.json())
             .then(products => createCards(products))
             .catch(error => console.error('Erro ao buscar lanches:', error));
     }
 
     function createCards(products) {
-        cardContainer.innerHTML = ''; // Limpa o container
+        cardContainer.innerHTML = ''; 
         
         products.forEach(product => {
+            console.log('Dados do produto:', product); // Debug
             const { id, nome, descricao, preco, imagem, categoria } = product;
-
+            console.log('URL da imagem:', imagem); // Debug
+            
             const card = document.createElement('div');
             card.classList.add('card');
             card.dataset.id = id;
 
             const categoryLabel = document.createElement('h6');
             categoryLabel.classList.add('category-label');
-            categoryLabel.textContent = categoria; // Adiciona a categoria no topo do card
+            categoryLabel.textContent = categoria;
             card.appendChild(categoryLabel);
 
             const img = document.createElement('img');
-            img.src = imagem;
-            img.alt = nome;
+            if (imagem && imagem !== 'null' && imagem !== 'undefined') {
+                img.src = imagem;
+                img.alt = nome;
+                img.onerror = function() {
+                    console.error(`Erro ao carregar imagem para ${nome}: ${imagem}`);
+                    this.src = '../assets/img/default-product.png';
+                };
+            } else {
+                img.src = '../assets/img/default-product.png';
+                img.alt = 'Imagem indisponível';
+            }
+            
+            // Adiciona classe para estilização
+            img.classList.add('card-image');
             card.appendChild(img);
 
             const title = document.createElement('h4');
@@ -155,10 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const addToCartIcon = document.createElement('i');
             addToCartIcon.classList.add('fa-solid', 'fa-plus', 'add-to-cart');
-            addToCartIcon.addEventListener('click', (event) => {
-                event.preventDefault();  // Impede o refresh
-                const product = { id, nome, preco: parseFloat(preco), imagem };
-                addToCart(product); // Passando o objeto correto
+            addToCartIcon.addEventListener('click', async (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const product = { 
+                    id, 
+                    nome, 
+                    preco: parseFloat(preco), 
+                    imagem: imagem 
+                };
+                await addToCart(product);
             });
 
             priceContainer.appendChild(price);
@@ -216,9 +237,20 @@ document.addEventListener('DOMContentLoaded', () => {
         cart.forEach((item, index) => {
             const cartItem = document.createElement('div');
             cartItem.classList.add('cart-item');
+
+            // Ajuste na exibição da imagem do carrinho
             const img = document.createElement('img');
-            img.src = item.imagem;
-            img.alt = item.nome;
+            if (item.imagem && item.imagem !== 'null' && item.imagem !== 'undefined') {
+                img.src = item.imagem; // Usa a URL diretamente
+                img.alt = item.nome;
+                img.onerror = function() {
+                    this.src = '../assets/img/default-product.png';
+                    console.error(`Erro ao carregar imagem do carrinho para ${item.nome}: ${item.imagem}`);
+                };
+            } else {
+                img.src = '../assets/img/default-product.png';
+                img.alt = 'Imagem indisponível';
+            }
             img.classList.add('cart-item-img');
             cartItem.appendChild(img);
             
@@ -234,9 +266,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const minusButton = document.createElement('button');
             minusButton.classList.add('minus-btn');
             minusButton.textContent = '-';
-            minusButton.addEventListener('click', (event) => {
+            minusButton.addEventListener('click', async (event) => {
                 event.preventDefault();
-                decreaseItemQuantity(index);
+                event.stopPropagation();
+                await decreaseItemQuantity(index);
             });
             
             const quantityLabel = document.createElement('span');
@@ -245,9 +278,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const plusButton = document.createElement('button');
             plusButton.classList.add('plus-btn');
             plusButton.textContent = '+';
-            plusButton.addEventListener('click', (event) => {
+            plusButton.addEventListener('click', async (event) => {
                 event.preventDefault();
-                increaseItemQuantity(index);
+                event.stopPropagation();
+                await increaseItemQuantity(index);
             });
             
             cartItem.appendChild(title);
@@ -364,6 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('finalizeOrderButton').addEventListener('click', async (event) => {
         event.preventDefault();
+        event.stopPropagation();
         if (!cart || cart.length === 0) {
             alert("O carrinho está vazio! Adicione itens antes de prosseguir para o pagamento.");
             return;

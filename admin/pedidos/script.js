@@ -1,21 +1,42 @@
-let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+document.addEventListener('DOMContentLoaded', () => {
+    fetchPedidos();
+});
 
-function carregarPedidos() {
-    const listaPedidos = document.getElementById('lista-pedidos');
-    listaPedidos.innerHTML = '';
+function fetchPedidos() {
+    fetch('http://localhost:5000/api/pedidos')
+        .then(response => response.json())
+        .then(data => {
+            const listaPedidos = document.getElementById('lista-pedidos');
+            listaPedidos.innerHTML = '';
 
-    pedidos.forEach(pedido => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <div class="pedido-detalhes">
-                <strong>${pedido.cliente}</strong>
-                <span>${pedido.produtos}</span>
-                <span><strong>Total:</strong> R$ ${pedido.total}</span>
-                <span class="pedido-hora"><strong>Data/Hora:</strong> ${pedido.dataHora}</span>
-            </div>
-        `;
-        listaPedidos.appendChild(li);
-    });
+            data.forEach(pedido => {
+                const pedidoItem = document.createElement('li');
+                pedidoItem.classList.add('pedido-item');
+
+                // Apenas número do pedido e nome do cliente inicialmente
+                pedidoItem.innerHTML = `
+                    <div class="pedido-header">Pedido #${pedido.id} - Cliente: ${pedido.usuario}</div>
+                    <div class="pedido-detalhes" style="display: none;">
+                        <p>Data: ${new Date(pedido.data_pedido).toLocaleString()}</p>
+                        <p>Status: ${pedido.status}</p>
+                        <p>Total: R$${isNaN(Number(pedido.total)) ? '0.00' : Number(pedido.total).toFixed(2)}</p>
+                        <h4>Itens:</h4>
+                        <ul>
+                            ${pedido.itens.map(item => `
+                                <li>${item.nome} - Quantidade: ${item.quantidade} - Preço: R$${isNaN(Number(item.preco_unitario)) ? '0.00' : Number(item.preco_unitario).toFixed(2)}</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+
+                // Evento de clique para mostrar/ocultar detalhes
+                pedidoItem.querySelector('.pedido-header').addEventListener('click', () => {
+                    const detalhes = pedidoItem.querySelector('.pedido-detalhes');
+                    detalhes.style.display = detalhes.style.display === 'none' ? 'block' : 'none';
+                });
+
+                listaPedidos.appendChild(pedidoItem);
+            });
+        })
+        .catch(error => console.error('Erro ao buscar pedidos:', error));
 }
-
-window.onload = carregarPedidos;

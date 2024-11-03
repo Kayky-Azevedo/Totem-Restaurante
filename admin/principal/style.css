@@ -8,14 +8,22 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(120deg, #f54e42, #f1a10a);
+    background: #fff9ea;
+}
+
+.image-top-left {
+    position: fixed; /* Fixa a imagem no canto da tela */
+    top: 0;
+    left: 2;
+    width: 150px; /* Defina a largura desejada */
+    height: auto; /* Mantém a proporção da imagem */
 }
 
 .btn-voltar {
     position: fixed;
     top: 20px;
     left: 20px;
-    background-color: #ff4400;
+    background-color: orange;
     color: white;
     padding: 10px 20px;
     text-align: center;
@@ -28,23 +36,23 @@ body {
 }
 
 .btn-voltar:hover {
-    background-color: #f8703a;
+    background-color: #ffd460;
 }
 
 /* Container Centralizado */
 .container {
     text-align: center;
-    background-color: white;
+    background: #fff;
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 15px 20px 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     max-width: 400px;
     width: 100%;
 }
 
 /* Título */
 h1 {
-    color: #f54e42;
+    color: #000;
     font-size: 24px;
     margin-bottom: 30px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -58,8 +66,8 @@ h1 {
 }
 
 .btn {
-    background-color: #f54e42;
-    color: white;
+    background-color: orange;
+    color: #fff;
     padding: 15px 30px;
     text-decoration: none;
     font-size: 16px;
@@ -70,7 +78,7 @@ h1 {
 }
 
 .btn:hover {
-    background-color: #d43d36;
+    background-color: #f3ab58;
 }
 
 .btn:active {

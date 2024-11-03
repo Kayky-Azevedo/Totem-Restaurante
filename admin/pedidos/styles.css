@@ -1,78 +1,118 @@
 /* Estilização do corpo com fundo gradiente */
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom right, #ff8c00, #ff4500);
-    color: #fff;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    background: #fff9ea;
     margin: 0;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px; /* Adicionar espaçamento para evitar bordas cortadas em telas pequenas */
+    padding: 20px;
+    color: #333;
 }
 
-.btn-voltar {
+/* Logo no canto superior esquerdo */
+.image-top-left {
     position: fixed;
-    top: 20px;
-    left: 20px;
-    background-color: #ff4400;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+    top: 10px; /* Ajuste para dar um pequeno espaçamento da borda */
+    left: 10px;
+    width: 150px;
+    height: auto;
     z-index: 100;
 }
 
-.btn-voltar:hover {
-    background-color: #f8703a; /* Cor ao passar o mouse */
+/* Botão Voltar */
+/* Botão Voltar dentro do container */
+.admin-container .btn-voltar {
+    display: inline-block;
+    margin-bottom: 20px;
+    background-color: #ff8f00;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    border: none;
 }
 
+.admin-container .btn-voltar:hover {
+    background-color: #ffa726;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Container Principal */
 .admin-container {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: #ffffff;
     padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
+    animation: fadeIn 0.5s ease;
 }
 
+/* Animação para o Container */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Título */
 h1 {
     text-align: center;
     margin-bottom: 20px;
+    color: #ff8f00;
+    font-size: 2em; /* Tamanho da fonte maior */
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase; /* Letras maiúsculas */
 }
 
-#pedidos-registrados {
-    margin-top: 30px;
+/* Lista de Pedidos */
+#lista-pedidos {
+    margin-top: 20px;
+    list-style-type: none; /* Remove os marcadores da lista */
+    padding: 0; /* Remove o padding padrão */
 }
 
 #lista-pedidos li {
-    background-color: #f5f5f5;
+    background-color: #fff5d5;
     color: #333;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; /* Para garantir que os itens se ajustem em telas menores */
+    margin-bottom: 15px; /* Margem maior entre os pedidos */
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
+#lista-pedidos li:hover {
+    background-color: #ffeba3;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px); /* Efeito de leve elevação ao passar o mouse */
+}
+
+/* Detalhes do Pedido */
 .pedido-detalhes {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+    display: none;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    color: #666;
+    line-height: 1.6;
 }
 
+/* Estilo da hora do pedido */
 .pedido-hora {
     font-size: 12px;
-    color: #777;
+    color: #999;
 }
 
+/* Estilo Responsivo */
 @media (max-width: 768px) {
     .admin-container {
         padding: 20px;
@@ -81,7 +121,7 @@ h1 {
     }
 
     .btn-voltar {
-        padding: 8px 16px;
+        padding: 10px 20px; /* Ajustar o padding */
         font-size: 14px;
     }
 

@@ -17,6 +17,15 @@ body {
     padding: 50px;
 }
 
+.image-top-left {
+    position: fixed;
+    top: 10px; /* Ajuste para dar um pequeno espaçamento da borda */
+    left: 10px;
+    width: 150px;
+    height: auto;
+    z-index: 100;
+}
+
 .container {
     background-color: #fff;
     border-radius: 30px;
@@ -170,6 +179,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1100; /* Certifique-se de que o z-index seja maior que o de outros elementos */
+    width: 80vw; /* Responsivo */
     display: none;
 }
 
@@ -223,7 +233,7 @@ body {
     background-color: orange;
     height: 100%;
     /* background: rgb(131,58,180); */
-    background: linear-gradient(90deg, orange 100%, #ffcb45 0%, #ffe100 0%);
+    background: linear-gradient(90deg, #ffe100 0%, #ffcb45 0%, orange 100%);
     color: #000;
     position: relative;
     left: -100%;
@@ -299,6 +309,7 @@ body {
         opacity: 0;
     }
 }
+
 
 /* Star generator */
 .star:nth-child(1) { left: 10%; animation-duration: 3s; }
