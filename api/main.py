@@ -302,62 +302,100 @@ def atualizar_lanche(id):
     con = get_connection()
     try:
         data = request.json
+        print("Dados recebidos:", data)
         
         # Verifica se o lanche existe
-        lanche_existente = con.execute(
-            "SELECT * FROM lanches WHERE id = ?", 
-            (id,)
-        ).fetchone()
+        lanche_atual = con.execute("""
+            SELECT l.*, c.nome as categoria_nome 
+            FROM lanches l
+            JOIN categorias c ON l.categoria_id = c.id
+            WHERE l.id = ?
+        """, (id,)).fetchone()
         
-        if not lanche_existente:
+        if not lanche_atual:
             return jsonify({'message': 'Lanche não encontrado.'}), 404
 
-        # Prepara os dados para atualização
-        nome = data.get('nome')
-        descricao = data.get('descricao')
-        preco = data.get('preco')
-        categoria_id = data.get('categoria_id')
-        image_url = data.get('image_url')
-        
-        if image_url == 'undefined':
-            image_url = None
-        
-        # Executa as atualizações individualmente
+        print("Lanche atual:", lanche_atual)
+
+        # Prepara os novos valores
+        novo_lanche = {
+            'id': id,
+            'nome': data.get('nome', lanche_atual[1]),
+            'descricao': data.get('descricao', lanche_atual[2]),
+            'preco': float(data.get('preco', lanche_atual[3])),
+            'categoria_id': int(data.get('categoria_id', lanche_atual[4])),
+            'image_url': data.get('image_url', lanche_atual[5])
+        }
+
+        # Verifica se há mudanças
+        mudancas = any([
+            novo_lanche['nome'] != lanche_atual[1],
+            novo_lanche['descricao'] != lanche_atual[2],
+            float(novo_lanche['preco']) != float(lanche_atual[3]),
+            int(novo_lanche['categoria_id']) != int(lanche_atual[4]),
+            novo_lanche['image_url'] != lanche_atual[5]
+        ])
+
+        if not mudancas:
+            return jsonify({'message': 'Nenhuma alteração necessária'}), 200
+
+        # Verifica se tem pedidos (apenas para mudança de categoria)
+        if int(novo_lanche['categoria_id']) != int(lanche_atual[4]):
+            tem_pedidos = con.execute("""
+                SELECT COUNT(*) FROM pedido_itens WHERE lanche_id = ?
+            """, (id,)).fetchone()[0] > 0
+            
+            if tem_pedidos:
+                return jsonify({
+                    'message': 'Não é possível alterar a categoria pois existem pedidos vinculados'
+                }), 400
+
         try:
-            con.execute("UPDATE lanches SET nome = ? WHERE id = ?", (nome, id))
-            con.execute("UPDATE lanches SET descricao = ? WHERE id = ?", (descricao, id))
-            con.execute("UPDATE lanches SET preco = ? WHERE id = ?", (preco, id))
-            con.execute("UPDATE lanches SET categoria_id = ? WHERE id = ?", (categoria_id, id))
-            con.execute("UPDATE lanches SET image_url = ? WHERE id = ?", (image_url, id))
+            # Remove o registro atual
+            con.execute('DELETE FROM lanches WHERE id = ?', (id,))
+            
+            # Insere o novo registro
+            con.execute('''
+                INSERT INTO lanches (id, nome, descricao, preco, categoria_id, image_url)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (
+                novo_lanche['id'],
+                novo_lanche['nome'],
+                novo_lanche['descricao'],
+                novo_lanche['preco'],
+                novo_lanche['categoria_id'],
+                novo_lanche['image_url']
+            ))
             
             con.commit()
-            
-            # Verifica se a atualização foi bem-sucedida
-            lanche_atualizado = con.execute("SELECT * FROM lanches WHERE id = ?", (id,)).fetchone()
-            
-            if lanche_atualizado:
-                return jsonify({
-                    'message': 'Lanche atualizado com sucesso!',
-                    'lanche': {
-                        'id': lanche_atualizado[0],
-                        'nome': lanche_atualizado[1],
-                        'descricao': lanche_atualizado[2],
-                        'preco': float(lanche_atualizado[3]),
-                        'categoria_id': lanche_atualizado[4],
-                        'image_url': lanche_atualizado[5]
-                    }
-                }), 200
-            
-        except Exception as update_error:
-            # Se o erro contiver "Duplicate key" mas a atualização funcionou, podemos ignorar
-            if "Duplicate key" in str(update_error):
-                return jsonify({
-                    'message': 'Lanche atualizado com sucesso!',
-                    'warning': 'Houve um aviso durante a atualização, mas os dados foram salvos corretamente.'
-                }), 200
-            else:
-                raise update_error
-                
+
+            # Verifica o estado final
+            produto_final = con.execute("""
+                SELECT l.*, c.nome as categoria_nome 
+                FROM lanches l
+                JOIN categorias c ON l.categoria_id = c.id
+                WHERE l.id = ?
+            """, (id,)).fetchone()
+
+            # Retorna o produto com todos os campos necessários para o card
+            return jsonify({
+                'message': 'Lanche atualizado com sucesso!',
+                'estado_atual': {
+                    'id': produto_final[0],
+                    'nome': produto_final[1],
+                    'descricao': produto_final[2],
+                    'preco': float(produto_final[3]),
+                    'categoria_id': produto_final[4],
+                    'imagem': produto_final[5],  # Alterado de image_url para imagem
+                    'categoria': produto_final[6],  # Alterado de categoria_nome para categoria
+                    'categoria_nome': produto_final[6]  # Mantido para compatibilidade
+                }
+            }), 200
+
+        except Exception as e:
+            con.rollback()
+            raise e
+
     except Exception as e:
         print(f"Erro durante a atualização: {str(e)}")
         return jsonify({
@@ -532,6 +570,13 @@ def update_cart(user_id):
     try:
         con = get_connection()
         data = request.get_json()
+        
+        # Se o carrinho estiver vazio (lista vazia), limpar o carrinho
+        if isinstance(data, list) and len(data) == 0:
+            con.execute('DELETE FROM Carrinho WHERE user_id = ?', (user_id,))
+            con.commit()
+            return jsonify([]), 200
+            
         item_id = data['id']
         action = data['action']
         
@@ -615,27 +660,55 @@ def remove_item_cart(user_id, lanche_id):
 # ==================== ROTAS DE PEDIDOS ====================
 @app.route('/api/pedidos', methods=['POST'])
 def criar_pedido():
+    con = get_connection()
     try:
-        con = get_connection()
-        data = request.json
+        data = request.get_json()
+        print("Dados recebidos:", data)  # Debug
+
         usuario_id = data.get('usuario_id')
         total = data.get('total')
-        itens = data.get('itens')  # Lista de itens
-        con.execute('''INSERT INTO pedidos (usuario_id, total) VALUES (?, ?)''', (usuario_id, total))
-        pedido_id = con.execute('SELECT last_insert_rowid()').fetchone()[0]
-        for item in itens:
-            lanche_id = item['lanche_id']
-            quantidade = item['quantidade']
-            preco_unitario = item['preco_unitario']
-            con.execute('''INSERT INTO pedido_itens (pedido_id, lanche_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)''', (pedido_id, lanche_id, quantidade, preco_unitario))
-        con.execute('DELETE FROM Carrinho WHERE usuario_id = ?', (usuario_id,))
-        con.commit()
-        return jsonify({'message': 'Pedido criado com sucesso!'}), 201
+        itens = data.get('itens')
+
+        if not all([usuario_id, total, itens]):
+            return jsonify({'error': 'Dados incompletos'}), 400
+
+        try:
+            # Iniciar transação
+            con.execute('BEGIN TRANSACTION')
+
+            # Criar pedido
+            pedido_id = con.execute('SELECT nextval(\'seq_pedidos\')').fetchone()[0]
+            con.execute(
+                'INSERT INTO pedidos (id, usuario_id, total, status) VALUES (?, ?, ?, ?)',
+                (pedido_id, usuario_id, total, 'pendente')
+            )
+
+            # Inserir itens do pedido
+            for item in itens:
+                item_id = con.execute('SELECT nextval(\'seq_pedido_itens\')').fetchone()[0]
+                con.execute('''
+                    INSERT INTO pedido_itens (id, pedido_id, lanche_id, quantidade, preco_unitario)
+                    VALUES (?, ?, ?, ?, ?)
+                ''', (item_id, pedido_id, item['lanche_id'], item['quantidade'], item['preco_unitario']))
+
+            # Commit da transação
+            con.execute('COMMIT')
+
+            return jsonify({
+                'message': 'Pedido criado com sucesso',
+                'pedido_id': pedido_id
+            }), 201
+
+        except Exception as e:
+            con.execute('ROLLBACK')
+            raise e
+
     except Exception as e:
-        app.logger.error(f"Erro ao criar pedido: {e}")
-        return jsonify({'error': 'Erro ao criar pedido.'}), 500
+        print(f"Erro ao criar pedido: {str(e)}")  # Debug
+        return jsonify({'error': str(e)}), 500
     finally:
-        con.close()
+        if con:
+            con.close()
 
 @app.route('/api/checkout', methods=['POST'])
 def checkout():
@@ -688,67 +761,60 @@ def get_pedidos():
 
 # ==================== ROTAS DE PAGAMENTOS ====================
 @app.route('/api/pagamento', methods=['POST'])
-def pagamento():
-    con = get_connection()
-    data = request.json
-    pedido_id = data.get('pedido_id')
-    metodo_pagamento = data.get('metodo_pagamento', 'Cartão de Crédito')
-    status_pagamento = data.get('status_pagamento', 'pago')
-    valor_pagamento = data.get('valor_pagamento')
-    nome_completo = data.get('nome_completo')
-    email = data.get('email')
-    endereco = data.get('endereco')
-    cidade = data.get('cidade')
-    estado = data.get('estado')
-    cep = data.get('cep')
-
-    try:
-        con.execute('UPDATE pedidos SET status_pagamento = ? WHERE id = ?', (status_pagamento, pedido_id))
-        con.execute('''INSERT INTO pagamentos (pedido_id, metodo_pagamento, status_pagamento, valor_pagamento, 
-                                               data_pagamento, nome_completo, email, endereco, cidade, estado, cep)
-                       VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)''', 
-                   (pedido_id, metodo_pagamento, status_pagamento, valor_pagamento, 
-                    nome_completo, email, endereco, cidade, estado, cep))
-        con.commit()
-        return jsonify({'message': 'Pagamento confirmado com sucesso!'}), 200
-    except Exception as e:
-        con.rollback()
-        return jsonify({'error': str(e)}), 500
-    finally:
-        con.close()
-
-@app.route('/api/lanches/categoria/<int:categoria_id>', methods=['GET'])
-def listar_lanches_por_categoria(categoria_id):
+def processar_pagamento():
     con = get_connection()
     try:
-        if categoria_id:
-            lanches = con.execute('''
-                SELECT l.*, c.nome as categoria 
-                FROM lanches l 
-                JOIN categorias c ON l.categoria_id = c.id 
-                WHERE l.categoria_id = ?
-            ''', (categoria_id,)).fetchall()
-        else:
-            lanches = con.execute('''
-                SELECT l.*, c.nome as categoria 
-                FROM lanches l 
-                JOIN categorias c ON l.categoria_id = c.id
-            ''').fetchall()
-
-        lanches_list = [{
-            'id': lanche[0],
-            'nome': lanche[1],
-            'descricao': lanche[2],
-            'preco': lanche[3],
-            'categoria_id': lanche[4],
-            'imagem': lanche[5],
-            'categoria': lanche[6]
-        } for lanche in lanches]
+        data = request.json
         
-        return jsonify(lanches_list), 200
+        # Iniciar transação
+        con.execute('BEGIN TRANSACTION')
+        
+        # Gerar ID do pagamento
+        pagamento_id = con.execute('SELECT nextval(\'seq_pagamentos\')').fetchone()[0]
+        
+        # Atualizar status do pedido para 'pago'
+        con.execute('''
+            UPDATE pedidos 
+            SET status = 'pago' 
+            WHERE id = ?
+        ''', (data['pedido_id'],))
+        
+        # Inserir registro de pagamento
+        con.execute('''
+            INSERT INTO pagamentos (
+                id, pedido_id, metodo_pagamento, status_pagamento,
+                valor_pagamento, nome_completo, email, endereco,
+                cidade, estado, cep
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            pagamento_id,
+            data['pedido_id'],
+            data['metodo_pagamento'],
+            'aprovado',  # Status fictício sempre aprovado
+            data['valor_pagamento'],
+            data.get('nome_completo'),
+            data.get('email'),
+            data.get('endereco'),
+            data.get('cidade'),
+            data.get('estado'),
+            data.get('cep')
+        ))
+        
+        # Commit da transação
+        con.execute('COMMIT')
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Pagamento processado com sucesso',
+            'pagamento_id': pagamento_id
+        }), 200
+        
     except Exception as e:
-        print(f"Erro ao listar lanches por categoria: {str(e)}")
-        return jsonify({'message': f'Erro ao listar lanches: {str(e)}'}), 500
+        con.execute('ROLLBACK')
+        return jsonify({
+            'status': 'error',
+            'message': f'Erro ao processar pagamento: {str(e)}'
+        }), 500
     finally:
         con.close()
 
