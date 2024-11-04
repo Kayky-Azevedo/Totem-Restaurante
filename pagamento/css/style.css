@@ -1,4 +1,4 @@
-@import url('https//fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
 
 *{
@@ -6,18 +6,39 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins','sans-serif';
+    font-family: 'Poppins', 'sans-serif';
 }
 
 .container{
 
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     min-height: 100vh;
     background: #1f242d;
     padding: 25px;
 
+}
+
+.valor-container {
+    background: #fff;
+    padding: 20px 40px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: 700px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.valor-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.preco {
+    color: #2ecc71;
 }
 
 .container form{
@@ -32,6 +53,7 @@ form .linhas{
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
+    margin-top: 0;
 }
 
 .linhas .colunas{
@@ -134,4 +156,191 @@ form .btn{
 
 form .btn:hover{
     background: #6a5acd;
+}
+
+.resumo-pedido {
+    margin: -20px -40px 20px -40px;
+    padding: 20px 40px;
+    background: #f8f9fa;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid #eee;
+}
+
+.itens-pedido {
+    margin: 20px 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.tabela-itens {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+.tabela-itens th,
+.tabela-itens td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.tabela-itens th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+}
+
+.tabela-itens tr:hover {
+    background-color: #f5f5f5;
+}
+
+.tabela-itens .quantidade {
+    text-align: center;
+}
+
+.tabela-itens .preco,
+.tabela-itens .subtotal {
+    text-align: right;
+}
+
+.item-nome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-imagem {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.qrcode-container {
+    text-align: center;
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.qrcode-container canvas {
+    margin: 20px auto;
+    display: block;
+}
+
+.instructions {
+    margin: 15px 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.botoes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#btnConfirmarPix {
+    background: #2ecc71;
+    margin-top: 15px;
+}
+
+#btnConfirmarPix:hover {
+    background: #27ae60;
+}
+
+/* Overlay de Loading */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loading-content {
+    text-align: center;
+    color: white;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #2ecc71;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Overlay de Sucesso */
+.success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.success-content {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: #2ecc71;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.btn-success {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.btn-success:hover {
+    background: #27ae60;
+}
+
+.redirect-message {
+    color: #666;
+    margin-top: 15px;
+    font-size: 0.9em;
 }

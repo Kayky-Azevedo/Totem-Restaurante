@@ -32,9 +32,11 @@
 }
 
 body {
-  background: var(--color-neutral-0);
+  background-color: #f4f4f4;
+  background: #fff9ea;
   padding: 0 3%;
   overflow-x: hidden;
+  padding-right: calc(450px + 3%);
 }
 
 .header {
@@ -104,7 +106,7 @@ body {
   padding: 0 1rem;
   max-width: 400px; /* Largura máxima da barra de pesquisa */
   min-width: 200px; /* Largura mínima da barra de pesquisa */
-  margin-right: 10px; /* Espaço para o ícone do carrinho */
+  margin-right: 0; /* Remove a margem que era usada para o ícone */
 }
 
 .search--box i {
@@ -126,18 +128,7 @@ body {
 }
 
 .cart-icon {
-  position: absolute; /* Muda para absoluto */
-  top: 50%; /* Centraliza verticalmente */
-  right: 20px; /* Distância do lado direito */
-  transform: translateY(-50%); /* Ajusta para que o ícone fique centralizado verticalmente */
-  background-color: var(--pri-color);
-  padding: 12px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s, box-shadow 0.3s; /* Transições suaves */
+  display: none;
 }
 
 .cart-icon:hover {
@@ -308,10 +299,9 @@ body {
   height: 100%; /* Ocupa toda a altura da tela */
   position: fixed;
   top: 0;
-  right: -100%; /* Inicialmente fora da tela */
+  right: 0; /* Alterado de -100% para 0 */
   background-color: var(--accent-color); /* Branco */
   box-shadow: -4px 0 6px rgba(0, 0, 0, 0.1);
-  transition: right 0.3s ease-in-out;
   z-index: 1000;
   padding: 20px;
   border-top-left-radius: 20px;
@@ -320,7 +310,7 @@ body {
 }
 
 .sidebar.open {
-  right: 0;
+  display: none; /* Remover esta classe */
 }
 
 .sidebar-close {
@@ -420,4 +410,188 @@ body {
     right: 10px; /* Ajusta o espaço do lado direito em telas menores */
     top: 50%; /* Mantém centralizado verticalmente */
   }
+
+  .sidebar {
+    width: 350px;
+  }
+
+  body {
+    padding-right: calc(350px + 3%);
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    width: 100%;
+    right: -100%; /* Volta a esconder em telas pequenas */
+  }
+
+  .sidebar.open {
+    right: 0;
+    display: block;
+  }
+
+  body {
+    padding-right: 3%; /* Remove o padding extra em telas pequenas */
+  }
+}
+
+/* Estilos do Carrinho */
+.cart-items {
+    padding: 10px;
+    max-height: calc(100vh - 250px);
+    overflow-y: auto;
+}
+
+.cart-item {
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cart-item-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Garante espaçamento entre elementos */
+    gap: 10px;
+    width: 100%;
+}
+
+.cart-item-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cart-item-info {
+    display: flex;
+    gap: 10px;
+}
+
+.cart-item-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.cart-item-price {
+    color: #FF8C00;
+    font-weight: 500;
+}
+
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto; /* Empurra os botões para a direita */
+}
+
+.cart-item-actions button {
+    background: #FF8C00;
+    color: white;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.cart-item-actions span {
+    min-width: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.empty-cart {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+    font-style: italic;
+}
+
+/* Estilos do Footer do Carrinho */
+.sidebar--footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+.total--amount {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.total--amount h5 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.cart-total {
+    font-weight: 600;
+    color: #FF8C00; /* Laranja */
+    font-size: 18px;
+}
+
+#finalizeOrderButton {
+    width: 100%;
+    padding: 12px;
+    background: #FF8C00; /* Laranja */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#finalizeOrderButton:hover {
+    background: #FF6B00; /* Laranja mais escuro no hover */
+}
+
+/* Ajustes do Sidebar */
+.sidebar {
+    background: #f8f9fa;
+    padding-bottom: 150px; /* Espaço para o footer */
+}
+
+.sidebar-close {
+    padding: 15px;
+    text-align: right;
+}
+
+.sidebar-close i {
+    cursor: pointer;
+    font-size: 20px;
+    color: #666;
+}
+
+.cart-menu h3 {
+    margin: 0 0 20px 0;
+    padding: 0 15px;
+    color: #333;
+    font-size: 20px;
+}
+
+/* Ocultar o botão de fechar */
+.sidebar-close {
+    display: none;
+}
+
+/* Ajustar o espaço do topo do carrinho já que não tem mais o botão de fechar */
+.cart-menu h3 {
+    margin-top: 0; /* Remove a margem superior que compensava o espaço do botão */
+    padding-top: 0;
 }

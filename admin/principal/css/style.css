@@ -2,52 +2,55 @@
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
+    background: #fff9ea;
     margin: 0;
-    padding: 0;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background: #fff9ea;
+    padding: 20px;
+    color: #333;
 }
 
 .image-top-left {
-    position: fixed; /* Fixa a imagem no canto da tela */
-    top: 0;
-    left: 2;
-    width: 150px; /* Defina a largura desejada */
-    height: auto; /* Mantém a proporção da imagem */
-}
-
-.btn-voltar {
     position: fixed;
-    top: 20px;
-    left: 20px;
-    background-color: orange;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+    top: 10px; /* Ajuste para dar um pequeno espaçamento da borda */
+    left: 10px;
+    width: 150px;
+    height: auto;
     z-index: 100;
 }
 
-.btn-voltar:hover {
-    background-color: #ffd460;
+.container .btn-voltar {
+    display: inline-block;
+    margin-bottom: 20px;
+    background-color: #ff8f00;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.container .btn-voltar:hover {
+    background-color: #ffa726;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* Container Centralizado */
 .container {
-    text-align: center;
-    background: #fff;
+    background-color: #ffffff;
     padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     width: 100%;
+    max-width: 400px;
+    animation: fadeIn 0.5s ease;
 }
 
 /* Título */
@@ -62,6 +65,7 @@ h1 {
 .button-container {
     display: flex;
     justify-content: center;
+    text-align: center;
     gap: 20px;
 }
 

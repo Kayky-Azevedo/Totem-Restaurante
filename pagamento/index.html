@@ -11,9 +11,16 @@
 <body>
 
     <div class="container">
+        <!-- Resumo do pedido fora do formulário -->
+        <div class="valor-container">
+            <div class="valor-total">
+                <span>Valor Total:</span>
+                <span id="valorTotal" class="preco">R$ 0,00</span>
+            </div>
+        </div>
 
         <!-- Formulário Cartão de Crédito -->
-        <form id="formPagamento" class="formulario" action="#">
+        <form id="formPagamento" class="formulario" onsubmit="return false;">
             <div class="linhas">
                 <div class="colunas">
                     <h3 class="titulo">Endereço de Cobrança</h3>
@@ -91,21 +98,47 @@
             <button type="button" id="btnSubmit" class="btn">Pagar</button>
         </form>
          <!-- Formulário Pix -->
-         <form id="formPix" class="formulario" action="#" style="display: none;">
-            <h3 class="titulo">Pagamento via Pix</h3>
+         <form id="formPix" class="formulario" style="display: none;" onsubmit="return false;">
             <div class="entrada-caixa">
                 <span>Nome Completo:</span>
                 <input type="text" id="nomeCompletoPix" placeholder="Rafael Cardoso Cordeiro" required>
             </div>
-            <div class="entrada-caixa">
-                <span>Valor:</span>
-                <input type="text" id="valorPix" placeholder="R$ 0,00" required>
+            
+            <!-- Container para o QR Code -->
+            <div class="qrcode-container" style="display: none;" id="qrcodeContainer">
+                <h3 class="titulo">QR Code para Pagamento</h3>
+                <canvas id="qrcode"></canvas>
+                <p id="instructions" class="instructions">Escaneie o QR Code com seu aplicativo bancário</p>
+                <button type="button" id="btnConfirmarPix" class="btn">Confirmar Pagamento</button>
             </div>
-            <canvas id="qrcode" style="display: none; margin-top: 10px;"></canvas>
-            <p id="instructions" style="display: none;">Escaneie o QR Code abaixo com seu aplicativo bancário.</p>
-            <button type="button" id="btnSubmitPix" class="btn">Gerar QRCode</button>
+
+            <div class="botoes-container">
+                <button type="button" id="btnGerarQRCode" class="btn">Gerar QR Code</button>
+                <button type="button" onclick="voltarParaCartao()" class="btn-secundario">
+                    Voltar para Cartão
+                </button>
+            </div>
         </form>
     </div>
     <script src="script/pagamento.js" defer></script>
+
+    <!-- Adicionar antes do fechamento do body -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p id="loadingText">Processando pagamento...</p>
+        </div>
+    </div>
+
+    <div id="successOverlay" class="success-overlay" style="display: none;">
+        <div class="success-content">
+            <div class="success-icon">✓</div>
+            <h2>Pagamento Confirmado!</h2>
+            <p>Seu pedido foi processado com sucesso.</p>
+            <button onclick="window.location.href='../confirmacao/index.html'" class="btn-success">
+                Ver Confirmação do Pedido
+            </button>
+        </div>
+    </div>
 </body>
 </html>

@@ -61,13 +61,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error('Falha ao inicializar o modal');
         }
 
-        // Inicializa o formulário de produto uma única vez
-        const formProduto = document.getElementById('form-produto');
-        if (formProduto) {
-            formProduto.addEventListener('submit', cadastrarProduto);
-        }
+        inicializarEventos();
 
-        // Carrega os dados iniciais
         await Promise.all([
             carregarCategorias(),
             carregarProdutos()
@@ -125,23 +120,24 @@ async function carregarProdutos() {
         listaProdutos.innerHTML = '';
 
         produtos.forEach(produto => {
-            // Converte o preço para número
-            const preco = parseFloat(produto.preco);
-            
             const card = document.createElement('div');
             card.className = 'produto-card';
             
+            // Garante que a URL da imagem seja usada corretamente
+            const imagemUrl = produto.image_url || produto.imagem || '../assets/img/not-found.jpg';
+            
             card.innerHTML = `
                 <div class="produto-imagem">
-                    <img src="${produto.imagem || 'caminho/para/imagem/padrao.jpg'}" 
+                    <img src="${imagemUrl}" 
                          alt="${produto.nome}" 
-                         onerror="this.src='../assets/img/not-found.jpg'">
+                         onerror="this.src='../assets/img/not-found.jpg'"
+                         style="max-width: 100%; height: auto;">
                 </div>
                 <div class="produto-info">
                     <h3>${produto.nome}</h3>
                     <p class="produto-descricao">${produto.descricao || 'Sem descrição'}</p>
-                    <p class="produto-preco">R$ ${preco.toFixed(2)}</p>
-                    <p class="produto-categoria">Categoria: ${produto.categoria}</p>
+                    <p class="produto-preco">R$ ${parseFloat(produto.preco).toFixed(2)}</p>
+                    <p class="produto-categoria">Categoria: ${produto.categoria || 'Sem categoria'}</p>
                 </div>
                 <div class="produto-acoes">
                     <button class="btn-icon btn-edit" onclick="editarProduto(${produto.id})">
@@ -163,82 +159,95 @@ async function carregarProdutos() {
 // Função para editar produto
 async function editarProduto(id) {
     try {
-        const response = await fetch(`${API_BASE_URL}/lanches/${id}`, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Erro ao carregar produto');
-        }
-
+        console.log(`🔄 Iniciando edição do produto ID: ${id}`);
+        
+        const response = await fetch(`${API_BASE_URL}/lanches/${id}`);
         const produto = await response.json();
-        console.log('Dados recebidos do produto:', produto);
-
-        // Scroll suave até o formulário
-        const formProduto = document.getElementById('form-produto');
-        if (formProduto) {
-            formProduto.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
+        
+        console.log('📦 Dados do produto recebidos:', produto);
+        
         // Preenche os campos do formulário
         document.getElementById('nome-produto').value = produto.nome || '';
         document.getElementById('descricao-produto').value = produto.descricao || '';
         document.getElementById('preco-produto').value = produto.preco || '';
-        document.getElementById('categoria-produto').value = produto.categoria_id || '';
-        document.getElementById('imagem-url').value = produto.image_url || ''; // Ajustado para 'imagem'
-
+        
+        const selectCategoria = document.getElementById('categoria-produto');
+        if (selectCategoria) {
+            console.log(`🎯 Categoria atual: ${produto.categoria_id}`);
+            selectCategoria.value = produto.categoria_id;
+        }
+        
+        document.getElementById('imagem-url').value = produto.image_url || '';
+        
         produtoEmEdicao = id;
+        console.log('✏️ Produto em modo de edição:', id);
 
+        // Atualiza o texto do botão
         const btnSalvar = document.getElementById('btn-salvar');
         if (btnSalvar) {
             btnSalvar.textContent = 'Atualizar';
-            btnSalvar.classList.add('btn-atualizar');
         }
 
     } catch (error) {
-        console.error('Erro ao carregar produto para edição:', error);
-        alert('Erro ao carregar produto para edição: ' + error.message);
+        console.error('❌ Erro ao carregar produto:', error);
+        mostrarNotificacao('Erro ao carregar produto para edição', 'erro');
     }
 }
 
 // Função para atualizar produto
-async function atualizarProduto() {
+async function atualizarProduto(event) {
+    event.preventDefault();
+    
     try {
-        if (!produtoEmEdicao) {
-            throw new Error('Nenhum produto selecionado para atualização');
-        }
-
-        const produto = {
-            nome: elementos.nome.value,
-            descricao: elementos.descricao.value,
-            preco: parseFloat(elementos.preco.value),
-            categoria_id: parseInt(elementos.categoria.value),
-            image_url: elementos.imagem.value.trim()
+        const formData = {
+            nome: document.getElementById('nome-produto').value.trim(),
+            descricao: document.getElementById('descricao-produto').value.trim(),
+            preco: parseFloat(document.getElementById('preco-produto').value),
+            categoria_id: parseInt(document.getElementById('categoria-produto').value),
+            image_url: document.getElementById('imagem-url').value.trim()
         };
 
-        console.log('Dados sendo enviados na atualização:', produto); // Debug
+        console.log('Dados sendo enviados:', formData);
 
         const response = await fetch(`${API_BASE_URL}/lanches/${produtoEmEdicao}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(produto)
+            body: JSON.stringify(formData)
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error('Erro ao atualizar produto');
+            throw new Error(data.message || 'Erro ao atualizar lanche');
         }
 
-        await atualizarListaProdutos();
-        resetarFormularioProduto();
-        mostrarNotificacao('Produto atualizado com sucesso!', 'sucesso');
+        // Exibe mensagem apropriada baseada na resposta
+        let mensagem = data.message;
+        if (data.tem_pedidos && formData.categoria_id !== data.lanche.categoria_id) {
+            mensagem = 'Produto atualizado parcialmente. A categoria não pôde ser alterada pois existem pedidos vinculados.';
+        }
+
+        alert(mensagem);
+        
+        // Atualiza a tabela
+        await carregarProdutos();
+        
+        // Limpa o formulário e reseta o estado
+        document.getElementById('form-produto').reset();
+        produtoEmEdicao = null;
+        document.querySelector('button[type="submit"]').textContent = 'Cadastrar';
+        
+        // Esconde o preview da imagem
+        const previewContainer = document.getElementById('preview-container');
+        if (previewContainer) {
+            previewContainer.style.display = 'none';
+        }
 
     } catch (error) {
-        console.error('Erro:', error);
-        mostrarNotificacao('Erro ao atualizar produto: ' + error.message, 'erro');
+        console.error('Erro na atualização:', error);
+        alert(error.message || 'Erro ao atualizar produto');
     }
 }
 
@@ -277,69 +286,61 @@ async function cadastrarProduto(event) {
             imagem: document.getElementById('imagem-url')
         };
 
-        // Verifica se todos os elementos existem
-        const elementosFaltando = Object.entries(elementos)
-            .filter(([, element]) => !element)
-            .map(([name]) => name);
-
-        if (elementosFaltando.length > 0) {
-            throw new Error(`Elementos não encontrados: ${elementosFaltando.join(', ')}`);
-        }
-
         const formData = {
             nome: elementos.nome.value.trim(),
             descricao: elementos.descricao.value.trim(),
             preco: parseFloat(elementos.preco.value),
             categoria_id: parseInt(elementos.categoria.value),
-            image_url: elementos.imagem.value.trim() // Mantém image_url para API
+            image_url: elementos.imagem.value.trim()
         };
 
-        console.log('Dados sendo enviados:', formData); // Para debug
+        console.log('Dados sendo enviados:', formData);
 
-        const url = produtoEmEdicao 
-            ? `${API_BASE_URL}/lanches/${produtoEmEdicao}`
-            : `${API_BASE_URL}/lanches`;
-
-        const response = await fetch(url, {
-            method: produtoEmEdicao ? 'PUT' : 'POST',
+        const response = await fetch(`${API_BASE_URL}/lanches`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(formData)
         });
 
+        const responseData = await response.json();
+
         if (!response.ok) {
-            const data = await response.json();
-            throw new Error(data.message || 'Erro ao salvar produto');
+            throw new Error(responseData.message || 'Erro ao salvar produto');
         }
 
-        // Limpa o formulário e atualiza a lista
-        resetarFormularioProduto();
+        limparFormulario();
         await carregarProdutos();
-        
-        alert(produtoEmEdicao ? 'Produto atualizado com sucesso!' : 'Produto cadastrado com sucesso!');
+        mostrarNotificacao('Produto cadastrado com sucesso!', 'sucesso');
 
     } catch (error) {
         console.error('Erro:', error);
-        alert(error.message);
+        mostrarNotificacao(error.message, 'erro');
     }
 }
 
-// Função para resetar o formulário
-function resetarFormularioProduto() {
+// Nova função para limpar o formulário
+function limparFormulario() {
     const form = document.getElementById('form-produto');
-    const btnSalvar = document.getElementById('btn-salvar');
-    
     if (form) {
         form.reset();
+        
+        // Reseta o botão
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        if (btnSubmit) {
+            btnSubmit.textContent = 'Cadastrar';
+        }
+        
+        // Limpa a variável de edição
+        produtoEmEdicao = null;
+        
+        // Esconde o preview da imagem
+        const previewContainer = document.getElementById('preview-container');
+        if (previewContainer) {
+            previewContainer.style.display = 'none';
+        }
     }
-    
-    if (btnSalvar) {
-        btnSalvar.textContent = 'Cadastrar';
-        btnSalvar.classList.remove('btn-atualizar');
-    }
-    
-    produtoEmEdicao = null;
 }
 
 // Variável global para controlar a categoria em edição
@@ -578,10 +579,12 @@ async function atualizarListaProdutos() {
                             >
                         </div>
                     ` : ''}
-                    <h3>${produto.nome}</h3>
-                    <p>${produto.descricao || ''}</p>
-                    <p>Preço: R$ ${parseFloat(produto.preco).toFixed(2)}</p>
-                    <p>Categoria: ${produto.categoria_nome || produto.categoria}</p>
+                    <div class="produto-detalhes">
+                        <h3 class="produto-nome">${produto.nome}</h3>
+                        <p class="produto-descricao">${produto.descricao || ''}</p>
+                        <p class="produto-preco">Preço: R$ ${parseFloat(produto.preco).toFixed(2)}</p>
+                        <p class="produto-categoria">Categoria: ${produto.categoria || produto.categoria_nome}</p>
+                    </div>
                 </div>
                 <div class="produto-acoes">
                     <button class="btn-icon btn-edit" onclick="editarProduto(${produto.id})">
@@ -610,34 +613,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Função para inicializar os eventos do formulário
 function inicializarEventos() {
-    if (eventosRegistrados) return; // Evita registro duplicado de eventos
+    if (eventosRegistrados) return;
 
     const form = document.getElementById('form-produto');
     if (form) {
-        // Remove eventos anteriores, se houver
-        form.removeEventListener('submit', cadastrarProduto);
-        // Adiciona o novo evento
-        form.addEventListener('submit', cadastrarProduto);
+        // Remove event listeners existentes
+        const novoForm = form.cloneNode(true);
+        form.parentNode.replaceChild(novoForm, form);
+        
+        // Adiciona novo event listener
+        novoForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (produtoEmEdicao) {
+                atualizarProduto(event);
+            } else {
+                cadastrarProduto(event);
+            }
+        });
+        
         eventosRegistrados = true;
     }
 }
-
-// Event listener para quando o DOM estiver pronto
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        // Inicializa os eventos uma única vez
-        inicializarEventos();
-        
-        // Carrega os dados iniciais
-        await Promise.all([
-            carregarCategorias(),
-            carregarProdutos()
-        ]);
-
-    } catch (error) {
-        console.error('Erro na inicialização:', error);
-    }
-});
 
 // Adicionar função auxiliar para scroll suave
 function scrollToForm() {
@@ -648,5 +644,11 @@ function scrollToForm() {
             block: 'start'
         });
     }
+}
+
+// Adicione a função mostrarNotificacao
+function mostrarNotificacao(mensagem, tipo) {
+    // Implementação básica de notificação
+    alert(mensagem);
 }
 

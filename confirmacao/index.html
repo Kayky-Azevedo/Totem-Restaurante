@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação do Pedido</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Processando seu pedido...</p>
+        </div>
+    </div>
+
+    <div id="mainContent" class="container" style="display: none;">
+        <div class="confirmacao-card">
+            <div class="success-icon">✓</div>
+            <h1>Pedido Confirmado!</h1>
+            <p class="mensagem">Seu pedido foi realizado com sucesso.</p>
+            
+            <div class="pedido-info">
+                <h2>Detalhes do Pedido</h2>
+                <div class="info-item">
+                    <span>Número do Pedido:</span>
+                    <span id="numeroPedido" class="destaque"></span>
+                </div>
+                <div class="info-item">
+                    <span>Status:</span>
+                    <span class="status-pago">Pago</span>
+                </div>
+                <div class="info-item">
+                    <span>Valor Total:</span>
+                    <span id="valorTotal" class="destaque"></span>
+                </div>
+            </div>
+
+            <div class="instrucoes">
+                <p>Você receberá um e-mail com os detalhes do seu pedido.</p>
+                <p>Tempo estimado para ficar pronto: 30-45 minutos</p>
+            </div>
+
+            <div class="botoes">
+                <button onclick="voltarHome()" class="btn-primary">Voltar para Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/confirmacao.js"></script>
+</body>
+</html> 
