@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function inicializarPagina() {
     exibirValorTotal();
+    configurarValidacaoEmTempoReal();
 }
 
 function exibirValorTotal() {
@@ -54,85 +55,40 @@ async function processPayment(event) {
     // Limpar erros anteriores
     limparErros();
 
-    // Coletar e validar dados do formulário
-    const campos = {
-        nomeCompleto: {
-            valor: document.getElementById('nomeCompleto').value.trim(),
-            mensagem: 'Nome Completo é obrigatório'
-        },
-        email: {
-            valor: document.getElementById('email').value.trim(),
-            mensagem: 'E-mail inválido',
-            validacao: validarEmail
-        },
-        endereco: {
-            valor: document.getElementById('endereco').value.trim(),
-            mensagem: 'Endereço é obrigatório'
-        },
-        cidade: {
-            valor: document.getElementById('cidade').value.trim(),
-            mensagem: 'Cidade é obrigatória'
-        },
-        estado: {
-            valor: document.getElementById('estado').value.trim(),
-            mensagem: 'Estado é obrigatório'
-        },
-        cep: {
-            valor: document.getElementById('cep').value.trim(),
-            mensagem: 'CEP inválido (formato: 00000-000)',
-            validacao: validarCEP
-        },
-        nomeCartao: {
-            valor: document.getElementById('nomeCartao').value.trim(),
-            mensagem: 'Nome no cartão é obrigatório'
-        },
-        numeroCartao: {
-            valor: document.getElementById('numeroCartao').value.trim(),
-            mensagem: 'Número do cartão inválido',
-            validacao: validarCartao
-        },
-        expiraMes: {
-            valor: document.getElementById('expiraMes').value.trim(),
-            mensagem: 'Mês de expiração é obrigatório'
-        },
-        expiraAno: {
-            valor: document.getElementById('expiraAno').value.trim(),
-            mensagem: 'Ano de expiração é obrigatório'
-        },
-        cvv: {
-            valor: document.getElementById('cvv').value.trim(),
-            mensagem: 'CVV inválido',
-            validacao: validarCVV
+    // Array com a ordem dos campos
+    const ordemCampos = [
+        'nomeCompleto',
+        'email',
+        'endereco',
+        'cidade',
+        'estado',
+        'cep',
+        'nomeCartao',
+        'numeroCartao',
+        'dataExpiracao',
+        'cvv'
+    ];
+
+    // Validar campos na ordem
+    for (const campoId of ordemCampos) {
+        const elemento = document.getElementById(campoId);
+        if (!validarCampo(elemento)) {
+            elemento.focus(); // Foca no primeiro campo com erro
+            return; // Para a validação no primeiro erro encontrado
         }
-    };
-
-    let temErro = false;
-
-    // Validar cada campo
-    Object.entries(campos).forEach(([id, campo]) => {
-        const elemento = document.getElementById(id);
-        
-        if (!campo.valor) {
-            mostrarErro(elemento, campo.mensagem);
-            temErro = true;
-        } else if (campo.validacao && !campo.validacao(campo.valor)) {
-            mostrarErro(elemento, campo.mensagem);
-            temErro = true;
-        }
-    });
-
-    if (temErro) {
-        return;
     }
 
-    // Continuar com o processamento do pagamento
+    // Se chegou aqui, todos os campos estão válidos
     try {
         mostrarLoading();
         const paymentData = {
             pedido_id: sessionStorage.getItem('pedidoId'),
             metodo_pagamento: 'cartao',
             valor_pagamento: sessionStorage.getItem('totalPedido'),
-            ...Object.fromEntries(Object.entries(campos).map(([key, campo]) => [key, campo.valor]))
+            ...Object.fromEntries(ordemCampos.map(id => [
+                id, 
+                document.getElementById(id).value.trim()
+            ]))
         };
 
         const response = await fetch('http://localhost:5000/api/pagamento', {
@@ -174,26 +130,111 @@ function validarCVV(cvv) {
 
 // Funções de manipulação de erro
 function mostrarErro(elemento, mensagem) {
+    // Remove erro anterior se existir
+    limparErro(elemento);
+    
+    // Adiciona classe de erro ao input
     elemento.classList.add('input-erro');
     
-    // Criar ou atualizar mensagem de erro
-    let erroElement = elemento.parentElement.querySelector('.erro-mensagem');
-    if (!erroElement) {
-        erroElement = document.createElement('div');
-        erroElement.className = 'erro-mensagem';
-        elemento.parentElement.appendChild(erroElement);
-    }
+    // Cria elemento de mensagem de erro
+    const erroElement = document.createElement('div');
+    erroElement.className = 'erro-mensagem';
     erroElement.textContent = mensagem;
+    
+    // Insere a mensagem após o input
+    elemento.parentElement.appendChild(erroElement);
+}
+
+function limparErro(elemento) {
+    elemento.classList.remove('input-erro');
+    const erroExistente = elemento.parentElement.querySelector('.erro-mensagem');
+    if (erroExistente) {
+        erroExistente.remove();
+    }
 }
 
 function limparErros() {
     document.querySelectorAll('.input-erro').forEach(elemento => {
-        elemento.classList.remove('input-erro');
+        limparErro(elemento);
     });
+}
+
+// Atualizar a função de validação para validar em tempo real
+function configurarValidacaoEmTempoReal() {
+    const campos = document.querySelectorAll('input');
+    campos.forEach(campo => {
+        campo.addEventListener('blur', () => {
+            validarCampo(campo);
+        });
+        
+        campo.addEventListener('input', () => {
+            if (campo.id === 'dataExpiracao') {
+                formatarDataExpiracao(campo);
+            }
+            if (campo.classList.contains('input-erro')) {
+                validarCampo(campo);
+            }
+        });
+    });
+}
+
+function validarCampo(campo) {
+    limparErro(campo);
     
-    document.querySelectorAll('.erro-mensagem').forEach(elemento => {
-        elemento.remove();
-    });
+    const valor = campo.value.trim();
+    
+    if (!valor) {
+        mostrarErro(campo, `${campo.previousElementSibling.textContent.replace(':', '')} é obrigatório`);
+        return false;
+    }
+    
+    // Validações específicas
+    switch(campo.id) {
+        case 'email':
+            if (!validarEmail(valor)) {
+                mostrarErro(campo, 'E-mail inválido');
+                return false;
+            }
+            break;
+        case 'cep':
+            if (!validarCEP(valor)) {
+                mostrarErro(campo, 'CEP inválido (formato: 00000-000)');
+                return false;
+            }
+            break;
+        case 'numeroCartao':
+            if (!validarCartao(valor)) {
+                mostrarErro(campo, 'Número de cartão inválido');
+                return false;
+            }
+            break;
+        case 'cvv':
+            if (!validarCVV(valor)) {
+                mostrarErro(campo, 'CVV inválido');
+                return false;
+            }
+            break;
+        case 'dataExpiracao':
+            if (!validarDataExpiracao(valor)) {
+                mostrarErro(campo, 'Data de expiração inválida');
+                return false;
+            }
+            break;
+    }
+    
+    return true;
+}
+
+// Adicionar novas funções de validação
+function validarMes(mes) {
+    const mesNum = parseInt(mes);
+    return mesNum >= 1 && mesNum <= 12;
+}
+
+function validarAno(ano) {
+    const anoAtual = new Date().getFullYear();
+    const anoNum = parseInt(ano);
+    return anoNum >= anoAtual && anoNum <= anoAtual + 10;
 }
 
 function mostrarErroGeral(mensagem) {
@@ -346,4 +387,46 @@ function redirecionarParaConfirmacao() {
             window.location.href = '/confirmacao/index.html';
         }
     }, 2000);
+}
+
+// Função para formatar a data de expiração
+function formatarDataExpiracao(campo) {
+    let valor = campo.value.replace(/\D/g, ''); // Remove não-dígitos
+    
+    if (valor.length >= 2) {
+        valor = valor.substring(0,2) + '/' + valor.substring(2);
+    }
+    
+    campo.value = valor;
+}
+
+// Função para validar a data de expiração
+function validarDataExpiracao(valor) {
+    if (!/^\d{2}\/\d{4}$/.test(valor)) {
+        return false;
+    }
+
+    const [mes, ano] = valor.split('/');
+    const mesNum = parseInt(mes);
+    const anoNum = parseInt(ano);
+    const dataAtual = new Date();
+    const anoAtual = dataAtual.getFullYear();
+    const mesAtual = dataAtual.getMonth() + 1;
+
+    // Validar mês
+    if (mesNum < 1 || mesNum > 12) {
+        return false;
+    }
+
+    // Validar ano
+    if (anoNum < anoAtual || anoNum > anoAtual + 10) {
+        return false;
+    }
+
+    // Verificar se o mês atual é menor que o mês de expiração
+    if (mesNum < mesAtual && anoNum === anoAtual) {
+        return false;
+    }
+
+    return true;
 }

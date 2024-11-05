@@ -9,13 +9,23 @@
     font-family: 'Poppins', 'sans-serif';
 }
 
-.container{
 
+.image-top-left {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 150px;
+    height: auto;
+}
+
+
+.container{
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    background: #1f242d;
+    background-color: #f4f4f4;
+    background: #fff9ea;
     padding: 25px;
 
 }
@@ -26,7 +36,7 @@
     border-radius: 10px;
     margin-bottom: 20px;
     width: 700px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
 }
 
 .valor-total {
@@ -38,7 +48,7 @@
 }
 
 .preco {
-    color: #2ecc71;
+    color: #000000;
 }
 
 .container form{
@@ -46,6 +56,7 @@
     padding: 40px;
     background: #fff;
     border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
 }
 
 form .linhas{
@@ -110,19 +121,30 @@ form .linhas{
     margin-top: 5px;
 }
 
-
-
 .escolha-opcao {
-
     display: flex;
+    align-items: center;
     gap: 5px;
+    color: #000000;
 }
+
+.escolha-opcao input[type="radio"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+.escolha-opcao label {
+    cursor: pointer;
+    user-select: none;
+}
+
 .entrada-caixa .btn-pix{
 
     width: 50%;
     height: 38px;
     padding: 10px;
-    background: #8175d3;
+    background: orange;
     border: none;
     outline: none;
     border-radius: 6px;
@@ -136,7 +158,7 @@ form .btn{
 
     width: 100%;
     padding: 12px;
-    background: #8175d3;
+    background: orange;
     border: none;
     outline: none;
     border-radius: 6px;
@@ -149,13 +171,13 @@ form .btn{
 }
 .entrada-caixa .btn-pix:hover{
 
-    background: #6a5acd;
+    background: #c59308;
 
 
 }
 
 form .btn:hover{
-    background: #6a5acd;
+    background: #c59308;
 }
 
 .resumo-pedido {
@@ -267,18 +289,31 @@ form .btn:hover{
 }
 
 .loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     color: white;
+    width: 300px;
 }
 
 .spinner {
     width: 50px;
     height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #2ecc71;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top: 5px solid #0ef;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 0 auto 20px;
+}
+
+.loading-text {
+    font-size: 1.2em;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 @keyframes spin {
@@ -343,4 +378,41 @@ form .btn:hover{
     color: #666;
     margin-top: 15px;
     font-size: 0.9em;
+}
+
+/* Estilo para campos com erro */
+.entrada-caixa input.input-erro {
+    border: 2px solid #ff3860;
+    background: rgba(255, 56, 96, 0.1);
+}
+
+/* Estilo para a mensagem de erro */
+.erro-mensagem {
+    color: #ff3860;
+    font-size: 0.8em;
+    margin-top: 5px;
+    display: block;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: showError 0.3s forwards;
+}
+
+/* Animação para a mensagem de erro */
+@keyframes showError {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilo para o container da mensagem de erro geral */
+.erro-geral {
+    background: rgba(255, 56, 96, 0.1);
+    border: 1px solid #ff3860;
+    color: #ff3860;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: showError 0.3s forwards;
 }

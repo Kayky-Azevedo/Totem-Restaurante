@@ -194,6 +194,7 @@ body {
 }
 
 .menu--item {
+  cursor: pointer;
   width: 114px;
   display: flex;
   align-items: center;

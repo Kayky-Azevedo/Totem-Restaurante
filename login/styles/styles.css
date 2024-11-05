@@ -32,9 +32,9 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     position: relative;
     overflow: hidden;
-    width: 768px;
+    width: 868px;
     max-width: 100%;
-    min-height: 480px;
+    min-height: 580px;
 }
 
 .container p {
@@ -174,12 +174,13 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1100; /* Certifique-se de que o z-index seja maior que o de outros elementos */
-    width: 80vw; /* Responsivo */
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1100;
+    width: 90%;
+    max-width: 400px;
     display: none;
 }
 
@@ -187,24 +188,94 @@ body {
     display: block;
 }
 
+.modal h2 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal form {
+    background: transparent;
+    padding: 0;
+    width: 100%;
+}
+
+.modal input {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+    font-size: 14px;
+}
+
+.modal button {
+    background-color: orange;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.modal button:hover {
+    background-color: #ff8c00;
+}
+
+.modal .senha-feedback {
+    background-color: rgba(255, 51, 51, 0.1);
+    padding: 10px;
+    border-radius: 6px;
+    margin: 5px 0;
+    font-size: 0.75em;
+}
+
+.modal .senha-feedback ul {
+    margin: 5px 0 0 20px;
+    padding: 0;
+}
+
+.modal .senha-feedback li {
+    margin: 3px 0;
+    color: #ff3333;
+}
+
 .modal-background {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000; /* O fundo fica logo abaixo do modal */
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1099;
     display: none;
+    backdrop-filter: blur(3px);
 }
 
 .modal-background.active {
     display: block;
 }
 
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
 
-.modal-background.active {
+.modal.active {
     display: block;
+    animation: modalIn 0.3s ease-out;
 }
 
 .password-container {
@@ -322,3 +393,76 @@ body {
 .star:nth-child(8) { left: 80%; animation-duration: 5s; }
 .star:nth-child(9) { left: 90%; animation-duration: 3.5s; }
 .star:nth-child(10) { left: 95%; animation-duration: 6.5s; }
+
+/* Estilo para o container da senha */
+.password-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.password-container input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    width: 30px !important;
+    height: 30px !important;
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;
+}
+
+/* Estilo do feedback de senha */
+.senha-feedback {
+    width: 100%;
+    background-color: #fff9ea;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.75em;
+    border: 1px solid #ffe0b2;
+    margin-top: 15px;
+    display: none;
+}
+
+.senha-feedback p {
+    color: #666;
+    margin: 0 0 5px 0;
+    font-weight: 500;
+}
+
+.senha-feedback ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: none;
+}
+
+.senha-feedback li {
+    color: #ff3333;
+    margin: 3px 0;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+}
+
+.senha-feedback li::before {
+    content: "•";
+    color: #ff3333;
+    margin-right: 5px;
+}
+
+/* Remove qualquer feedback que possa estar dentro do password-container */
+.password-container .senha-feedback {
+    display: none !important;
+}

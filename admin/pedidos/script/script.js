@@ -9,6 +9,21 @@ function fetchPedidos() {
             const listaPedidos = document.getElementById('lista-pedidos');
             listaPedidos.innerHTML = '';
 
+            // Calcula o valor total dos pedidos
+            const valorTotal = data.reduce((total, pedido) => {
+                const valorPedido = isNaN(Number(pedido.total)) ? 0 : Number(pedido.total);
+                return total + valorPedido;
+            }, 0);
+
+            // Atualiza o elemento com o valor total
+            const totalElement = document.querySelector('.total-pedidos span');
+            if (totalElement) {
+                totalElement.textContent = `R$ ${valorTotal.toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}`;
+            }
+
             data.forEach(pedido => {
                 const pedidoItem = document.createElement('li');
                 pedidoItem.classList.add('pedido-item');
@@ -38,5 +53,23 @@ function fetchPedidos() {
                 listaPedidos.appendChild(pedidoItem);
             });
         })
-        .catch(error => console.error('Erro ao buscar pedidos:', error));
+        .catch(error => {
+            console.error('Erro ao buscar pedidos:', error);
+            // Adiciona tratamento de erro visual
+            const totalElement = document.querySelector('.total-pedidos span');
+            if (totalElement) {
+                totalElement.textContent = 'Erro ao calcular total';
+            }
+        });
 }
+
+// Opcional: Atualizar os pedidos a cada X segundos
+function iniciarAtualizacaoAutomatica(intervalo = 30000) { // 30 segundos
+    setInterval(fetchPedidos, intervalo);
+}
+
+// Iniciar atualizações automáticas quando a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+    fetchPedidos();
+    iniciarAtualizacaoAutomatica();
+});

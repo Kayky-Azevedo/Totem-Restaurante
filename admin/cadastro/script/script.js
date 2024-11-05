@@ -220,7 +220,7 @@ async function atualizarProduto(event) {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.message || 'Erro ao atualizar lanche');
+            throw new Error(data.message || 'Produto esta em algum pedido');
         }
 
         // Exibe mensagem apropriada baseada na resposta

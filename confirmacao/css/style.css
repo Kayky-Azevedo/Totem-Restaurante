@@ -8,7 +8,8 @@
 }
 
 body {
-    background: #1f242d;
+    background-color: #f4f4f4;
+    background: #fff9ea;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -31,7 +32,7 @@ body {
     max-width: 600px;
     width: 90%;
     margin: 0 auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     animation: fadeIn 0.5s ease-out;
 }
 
@@ -68,7 +69,7 @@ body {
     width: 50px;
     height: 50px;
     border: 5px solid #f3f3f3;
-    border-top: 5px solid #2ecc71;
+    border-top: 5px solid orange;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 20px;
@@ -82,7 +83,7 @@ body {
 .success-icon {
     width: 80px;
     height: 80px;
-    background: #2ecc71;
+    background: orange;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -106,7 +107,7 @@ body {
 }
 
 .status-pago {
-    color: #2ecc71;
+    color: orange;
     font-weight: bold;
 }
 
@@ -132,7 +133,7 @@ body {
 }
 
 .btn-primary {
-    background: #2ecc71;
+    background: orange;
     color: white;
 }
 

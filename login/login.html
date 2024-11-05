@@ -32,31 +32,50 @@
         <div class="form-container sign-up">
             <form id="signupForm">
                 <h1>Criar Conta</h1>
-                <br>
+                <span>ou use seu email para cadastro</span>
                 <input type="text" id="signupNome" placeholder="Nome" required>
                 <input type="email" id="signupEmail" placeholder="Email" required>
-                <input type="password" id="signupSenha" placeholder="Senha" required>
-                <input type="text" id="signupTelefone" placeholder="Telefone" required>
-                <button>Cadastre-se</button>
+                <input type="tel" id="signupTelefone" placeholder="Telefone" required>
+                <div class="password-container">
+                    <input type="password" id="signupSenha" placeholder="Senha" required>
+                    <button type="button" class="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <button type="submit">Cadastrar</button>
             </form>
         </div>
         <div class="form-container sign-in">
             <form id="loginForm">
                 <h1>Login</h1>
-                <br>
-                <span>Insira seu email e senha para entrar</span>
+                <span>ou use seu email e senha</span>
                 <input type="email" id="loginEmail" placeholder="Email" required>
-                <input type="password" id="loginSenha" placeholder="Password" required>
-                <a href="#" id="forgotPassword">Esqueceu a senha?</a>
-                <button>Entrar</button>
+                <div class="password-container">
+                    <input type="password" id="loginSenha" placeholder="Senha" required>
+                    <button type="button" class="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <a href="#" id="forgotPassword">Esqueceu sua senha?</a>
+                <button type="submit">Login</button>
             </form>
         </div>
         <div id="modalBackground" class="modal-background hidden"></div>
-        <div id="resetPasswordModal" class="modal hidden">
+        <div id="resetPasswordModal" class="modal">
+            <h2>Redefinir Senha</h2>
             <form id="resetPasswordForm">
-                <h2>Redefinir Senha</h2>
-                <input type="email" id="email" placeholder="Digite seu email" required>
-                <input type="password" id="newPassword" placeholder="Digite a nova senha" required>
+                <input 
+                    type="email" 
+                    id="email" 
+                    placeholder="Seu email" 
+                    required
+                >
+                <div class="password-container">
+                    <input type="password" id="newPassword" placeholder="Nova senha" required>
+                    <button type="button" class="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
                 <button type="submit">Redefinir Senha</button>
             </form>
         </div>

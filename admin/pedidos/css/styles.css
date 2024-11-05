@@ -73,7 +73,7 @@ h1 {
     text-transform: uppercase; /* Letras maiúsculas */
 }
 
-/* Lista de Pedidos */
+/* Lista de Pedidos - Melhorias */
 #lista-pedidos {
     margin-top: 20px;
     list-style-type: none; /* Remove os marcadores da lista */
@@ -81,35 +81,48 @@ h1 {
 }
 
 #lista-pedidos li {
-    background-color: #fff5d5;
-    color: #333;
-    margin-bottom: 15px; /* Margem maior entre os pedidos */
-    padding: 15px;
-    border-radius: 8px;
+    background-color: #ffffff;
+    border-left: 5px solid #ff8f00;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 #lista-pedidos li:hover {
-    background-color: #ffeba3;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px); /* Efeito de leve elevação ao passar o mouse */
+    background-color: #fff9ea;
+    box-shadow: 0 8px 20px rgba(255, 143, 0, 0.15);
+    transform: translateY(-3px);
 }
 
-/* Detalhes do Pedido */
+/* Detalhes do Pedido - Melhorias */
 .pedido-detalhes {
     display: none;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
-    color: #666;
-    line-height: 1.6;
+    padding-top: 15px;
+    margin-top: 15px;
+    border-top: 2px dashed #ff8f00;
+    color: #555;
+    line-height: 1.8;
+    font-size: 0.95em;
 }
 
-/* Estilo da hora do pedido */
+/* Estilo da hora do pedido - Melhorias */
 .pedido-hora {
-    font-size: 12px;
-    color: #999;
+    font-size: 0.85em;
+    color: #666;
+    font-weight: 500;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #fff9ea;
+    padding: 5px 10px;
+    border-radius: 15px;
 }
 
 /* Estilo Responsivo */
@@ -128,5 +141,40 @@ h1 {
     #lista-pedidos li {
         flex-direction: column;
         text-align: left;
+    }
+}
+
+/* Estilo para o total dos pedidos */
+.total-pedidos {
+    background-color: #ff8f00;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    margin: 20px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(255, 143, 0, 0.2);
+}
+
+.total-pedidos span {
+    font-size: 1.3em;
+}
+
+.total-pedidos:hover {
+    background-color: #f57c00;
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Versão responsiva */
+@media (max-width: 768px) {
+    .total-pedidos {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+        padding: 12px 20px;
     }
 }

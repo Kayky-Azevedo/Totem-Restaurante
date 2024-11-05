@@ -35,6 +35,36 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('http://localhost:5000/api/categorias')
             .then(response => response.json())
             .then(categories => {
+                // Limpa a lista de menu antes de adicionar os itens
+                menuList.innerHTML = '';
+                
+                // Adiciona o botão "Todos" primeiro
+                const todosItem = document.createElement('div');
+                todosItem.classList.add('menu--item', 'active');
+                todosItem.dataset.category = 'todos';
+                
+                const todosTitle = document.createElement('h5');
+                todosTitle.textContent = 'Todos';
+                
+                todosItem.appendChild(todosTitle);
+                menuList.appendChild(todosItem);
+                
+                todosItem.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    
+                    // Remove a classe ativa de todos os itens
+                    document.querySelectorAll('.menu--item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // Adiciona a classe ativa ao item "Todos"
+                    todosItem.classList.add('active');
+                    
+                    currentCategoryId = null; // Reset da categoria atual
+                    fetchAllProducts(); // Mostra todos os produtos
+                });
+                
+                // Adiciona as demais categorias
                 categories.forEach(createCategory);
             })
             .catch(error => console.error('Erro ao buscar categorias:', error));
@@ -268,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 `;
-                
+                    
                 cartItemsContainer.appendChild(cartItem);
                 total += item.preco * item.quantity;
             });
@@ -540,4 +570,32 @@ document.addEventListener('DOMContentLoaded', () => {
         cartTotal.textContent = `R$${total.toFixed(2)}`;
         return total;
     }
+
+    const searchInput = document.querySelector('.search--box input');
+    let timeoutId = null;
+
+    searchInput.addEventListener('input', (e) => {
+        // Cancela o timeout anterior se existir
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+        
+        // Cria um novo timeout para fazer a pesquisa
+        timeoutId = setTimeout(() => {
+            const termo = e.target.value.trim();
+            if (termo === '') {
+                fetchAllProducts(); // Retorna todos os produtos se a pesquisa estiver vazia
+                return;
+            }
+            
+            fetch(`http://localhost:5000/api/lanches/pesquisa?termo=${encodeURIComponent(termo)}`)
+                .then(response => response.json())
+                .then(products => {
+                    createCards(products);
+                })
+                .catch(error => {
+                    console.error('Erro na pesquisa:', error);
+                });
+        }, 300); // Aguarda 300ms após o último caractere digitado
+    });
 });

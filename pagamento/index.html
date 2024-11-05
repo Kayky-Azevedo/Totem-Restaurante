@@ -9,7 +9,7 @@
     <title>Tela de Pagamento</title>
 </head>
 <body>
-
+    <img src="../../src/imgs/logo.png" alt="Imagem no canto superior esquerdo" class="image-top-left">  
     <div class="container">
         <!-- Resumo do pedido fora do formulário -->
         <div class="valor-container">
@@ -69,26 +69,20 @@
                         <input type="text" id="numeroCartao" placeholder="0001200044455345">
                     </div>
                     <div class="entrada-caixa">
-                        <span>Expira Mês :</span>
-                        <input type="text" id="expiraMes" placeholder="Setembro">
+                        <span>Data de Expiração :</span>
+                        <input type="text" id="dataExpiracao" placeholder="MM/AAAA" maxlength="7">
                     </div>
-                    <div class="flex">
-                        <div class="entrada-caixa">
-                            <span>Expira Ano :</span>
-                            <input type="number" id="expiraAno" placeholder="2027">
-                        </div>
-                        <div class="entrada-caixa">
-                            <span>CVV :</span>
-                            <input type="number" id="cvv" placeholder="123">
-                        </div>
+                    <div class="entrada-caixa">
+                        <span>CVV :</span>
+                        <input type="number" id="cvv" placeholder="123">
                     </div>
                     <div class="flex">
                         <div class="escolha-opcao">
-                            <input type="checkbox" name="credito">
+                            <input type="radio" name="tipoPagamento" id="credito" value="credito" checked>
                             <label for="credito"> Crédito</label>
                         </div>
                         <div class="escolha-opcao">
-                            <input type="checkbox" name="debito">
+                            <input type="radio" name="tipoPagamento" id="debito" value="debito">
                             <label for="debito"> Débito</label>
                         </div>
                     </div>
@@ -114,7 +108,7 @@
 
             <div class="botoes-container">
                 <button type="button" id="btnGerarQRCode" class="btn">Gerar QR Code</button>
-                <button type="button" onclick="voltarParaCartao()" class="btn-secundario">
+                <button type="button" onclick="voltarParaCartao()" class="btn">
                     Voltar para Cartão
                 </button>
             </div>
